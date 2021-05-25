@@ -1,5 +1,5 @@
 repos:
--   repo: https://github.com/gvanderest/pylama-pre-commit
-    rev: 0.1.2
+-   repo: https://github.com/pycqa/flake8
+    rev: 3.9.2
     hooks:
-    - id: pylama
+    - id: flake8
