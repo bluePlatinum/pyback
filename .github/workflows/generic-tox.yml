@@ -31,4 +31,4 @@ jobs:
         python -m pipenv install --dev
     - name: run tox
       run: |
-        tox
+        python -m tox
