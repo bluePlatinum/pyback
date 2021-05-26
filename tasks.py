@@ -14,3 +14,9 @@ def lint(c, scope):
         c.run("flake8 src")
     elif scope == "tests":
         c.run("flake8 tests")
+
+
+@task
+def build(c):
+    c.run("python -m build --sdist")
+    c.run("python -m build --wheel")
