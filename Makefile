@@ -1,6 +1,6 @@
 init:
 	pip install --upgrade pip
-	pip install pipenv typing_extensions
+	pip install pipenv
 	pipenv install --dev
 
 tox:
