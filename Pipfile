@@ -11,6 +11,8 @@ pre-commit = "*"
 tox = "*"
 pytest = "*"
 flake8 = "*"
+twine = "*"
+build = "*"
 
 [requires]
 python_version = "3"
