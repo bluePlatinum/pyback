@@ -15,14 +15,19 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 
+# -- Imports -----------------------------------------------------------------
+
+from pybacked import __version__
+
+
 # -- Project information -----------------------------------------------------
 
-project = 'pyback'
+project = 'pybacked'
 copyright = '2021, bluePlatinum'
 author = 'bluePlatinum'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.0.dev2'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
