@@ -14,6 +14,7 @@ flake8 = "*"
 twine = "*"
 build = "*"
 sphinx = "*"
+pybacked = {editable = true, path = "."}
 
 [requires]
 python_version = "3"
