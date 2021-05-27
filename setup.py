@@ -1,11 +1,13 @@
 import setuptools
+from pybacked import __version__
+
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="pybacked",
-    version="0.0.0.dev2",
+    version=__version__,
     author="Roko Jukic",
     author_email="jukic.rok@gmail.com",
     description="a simple backup utility",
