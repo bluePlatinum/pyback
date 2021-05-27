@@ -22,4 +22,5 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
                                   compresslevel=compressionlevel)
         for filepath, filename in filedict:
             archive.write(filepath, arcname=filename)
+    archive.close()
     return True
