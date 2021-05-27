@@ -3,8 +3,15 @@ from invoke import task
 
 
 @task
-def setup_dev(c):
-    c.run("pre-commit install")
+def build(c, target):
+    if target == "package":
+        c.run("python -m build --sdist")
+        c.run("python -m build --wheel")
+    elif target == "docs":
+        if platform.system() == "Linux":
+            c.run("make -C ./docs html")
+        elif platform.system() == "Windows":
+            c.run(".\\docs\\make.bat html")
 
 
 @task
@@ -18,12 +25,5 @@ def lint(c, scope):
 
 
 @task
-def build(c, target):
-    if target == "package":
-        c.run("python -m build --sdist")
-        c.run("python -m build --wheel")
-    elif target == "docs":
-        if platform.system() == "Linux":
-            c.run("make -C ./docs html")
-        elif platform.system() == "Windows":
-            c.run(".\\docs\\make.bat html")
+def setup_dev(c):
+    c.run("pre-commit install")
