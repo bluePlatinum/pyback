@@ -13,6 +13,7 @@ pytest = "*"
 flake8 = "*"
 twine = "*"
 build = "*"
+sphinx = "*"
 
 [requires]
 python_version = "3"

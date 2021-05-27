@@ -1,3 +1,4 @@
+import platform
 from invoke import task
 
 
@@ -17,6 +18,12 @@ def lint(c, scope):
 
 
 @task
-def build(c):
-    c.run("python -m build --sdist")
-    c.run("python -m build --wheel")
+def build(c, target):
+    if target == "package":
+        c.run("python -m build --sdist")
+        c.run("python -m build --wheel")
+    elif target == "docs":
+        if platform.system() == "Linux":
+            c.run("make -C ./docs html")
+        elif platform.system() == "Windows":
+            c.run(".\\docs\\make.bat html")
