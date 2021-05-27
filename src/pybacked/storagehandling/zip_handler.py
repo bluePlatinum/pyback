@@ -20,7 +20,7 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
         archive = zipfile.ZipFile(archivepath, mode='x',
                                   compression=compression,
                                   compresslevel=compressionlevel)
-        for filepath, filename in filedict:
+        for filepath, filename in filedict.items():
             archive.write(filepath, arcname=filename)
     archive.close()
     return True
