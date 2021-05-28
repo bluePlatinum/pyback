@@ -31,8 +31,10 @@ jobs:
     - name: run tox
       run: |
         python -m tox
-    - name: Upload a Build Artifact
+    - name: Upload tox logs
       uses: actions/upload-artifact@v2.2.3
       with:
-        name: tox_files
-        path: .tox
+        name: tox_logs
+        path: |
+          .tox/log/
+          .tox/${{ matrix.python-version }}/log/
