@@ -31,11 +31,13 @@ jobs:
       run: |
         tox -e py
     - name: Upload tox logs
+      if: always()
       uses: actions/upload-artifact@v2.2.3
       with:
         name: tox_logs_${{ matrix.python-version }}
         path: .tox/log/
     - name: Upload tox env logs
+      if: always()
       uses: actions/upload-artifact@v2.2.3
       with:
         name: tox_logs_${{ matrix.python-version }}
