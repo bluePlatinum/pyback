@@ -30,11 +30,11 @@ jobs:
         python -m pip install tox
     - name: run tox
       run: |
-        python -m tox
+        tox -e py
     - name: Upload tox logs
       uses: actions/upload-artifact@v2.2.3
       with:
         name: tox_logs
         path: |
           .tox/log/
-          .tox/${{ matrix.python-version }}/log/
+          .tox/py${{ matrix.python-version }}/log/
