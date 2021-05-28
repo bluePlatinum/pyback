@@ -1,3 +1,0 @@
-This is a test file!
-Its purpose is to go through read, write or read-write cycles.
-Its supposed to serve as a reference for testing.
