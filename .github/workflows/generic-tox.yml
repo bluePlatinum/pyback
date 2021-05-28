@@ -31,3 +31,8 @@ jobs:
     - name: run tox
       run: |
         python -m tox
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: tox_files
+        path: .tox
