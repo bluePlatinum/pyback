@@ -35,9 +35,9 @@ jobs:
       uses: actions/upload-artifact@v2.2.3
       with:
         name: tox_logs_${{ matrix.python-version }}
-        path: |
-          .tox/log/
-          .tox/py36/log/
-          .tox/py37/log/
-          .tox/py38/log/
-          .tox/py39/log/
+        path: .tox/log/
+    - name: Upload tox env logs
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: tox_logs_${{ matrix.python-version }}
+        path: ./tox/py*/log/
