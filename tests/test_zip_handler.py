@@ -16,11 +16,13 @@ def test_zip_write():
         control_archive = io.open(
             osp.abspath("./tests/testdata/test_archive1_deflate.zip"), "rb")
         control = control_archive.read()
+        print(control)
         control_archive.close()
 
         probe_archive = io.open(
             osp.abspath(tmpdir + "/probe_archive.zip"), "rb")
         probe = probe_archive.read()
+        print(probe)
         probe_archive.close()
 
     assert control == probe
