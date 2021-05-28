@@ -13,14 +13,13 @@ def test_zip_write():
         zip_handler.zip_write(osp.abspath(tmpdir + "/probe_archive.zip"),
                               filedict, compression=zipfile.ZIP_DEFLATED,
                               compressionlevel=9)
-        control_archive = io.open(
-            osp.abspath("./tests/testdata/test_archive1_deflate.zip"), "rb")
-        control = control_archive.read()
-        control_archive.close()
 
-        probe_archive = io.open(
-            osp.abspath(tmpdir + "/probe_archive.zip"), "rb")
-        probe = probe_archive.read()
+        probe_archive = zipfile.ZipFile(tmpdir + "/probe_archive.zip")
+        probe_data = probe_archive.read("test_sample1.txt")
         probe_archive.close()
 
-    assert control == probe
+        control_file = io.open("./tests/testdata/test_sample1.txt", "rb")
+        control_data = control_file.read()
+        control_file.close()
+
+    assert probe_data == control_data
