@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v2.2.3
       with:
         name: tox_logs_${{ matrix.python-version }}
-        path: ./tox/*/log/
+        path: ./tox/*/log/**
