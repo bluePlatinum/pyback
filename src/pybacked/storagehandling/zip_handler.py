@@ -18,9 +18,9 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
         return False
     else:
         archive = zipfile.ZipFile(archivepath, mode='x',
-                                  compression=compression)
+                                  compression=compression,
+                                  compresslevel=compressionlevel)
         for filepath, filename in filedict.items():
-            archive.write(filepath, arcname=filename,
-                          compresslevel=compressionlevel)
+            archive.write(filepath, arcname=filename)
     archive.close()
     return True
