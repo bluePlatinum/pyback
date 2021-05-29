@@ -1,3 +1,4 @@
+import io
 import os
 import zipfile
 
@@ -12,10 +13,10 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
     pairs
     :param compression: desired compression methods (see zipfile documentation)
     :param compressionlevel: compression level (see zipfile documentation)
-    :return:
+    :return: void
     """
     if os.path.isfile(archivepath):
-        return False
+        raise FileExistsError("Specified file already exists")
     else:
         archive = zipfile.ZipFile(archivepath, mode='x',
                                   compression=compression,
@@ -23,4 +24,30 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
         for filepath, filename in filedict.items():
             archive.write(filepath, arcname=filename)
     archive.close()
-    return True
+
+
+def read_bin(archivepath, filelist):
+    """Read a list of files from an archive and return the file data as a
+    dictionary of filename, data key-value pairs.
+
+    :param archivepath: the path to the archive
+    :param filename: list of filenames to read
+    :return: dictionary with filename, data key-value pairs
+    """
+    datadict = dict()
+    if os.path.isfile(archivepath):
+        archive = zipfile.ZipFile(archivepath, mode='r')
+    else:
+        raise FileNotFoundError("Specified file does not exist")
+    for filename in filelist:
+        try:
+            buffer = archive.open(filename)
+            wrapper = io.TextIOWrapper(buffer, newline=None)
+
+            datadict[filename] = wrapper.read()
+
+            wrapper.close()
+            buffer.close()
+        except KeyError:
+            datadict[filename] = None
+    return datadict
