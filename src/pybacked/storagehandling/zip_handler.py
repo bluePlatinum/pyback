@@ -12,7 +12,7 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
     pairs
     :param compression: desired compression methods (see zipfile documentation)
     :param compressionlevel: compression level (see zipfile documentation)
-    :return:
+    :return: void
     """
     if os.path.isfile(archivepath):
         raise FileExistsError("Specified file already exists")
@@ -23,7 +23,6 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
         for filepath, filename in filedict.items():
             archive.write(filepath, arcname=filename)
     archive.close()
-    return True
 
 
 def read_binary(archivepath, filelist):
