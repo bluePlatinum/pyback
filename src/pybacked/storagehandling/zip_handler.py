@@ -24,3 +24,24 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
             archive.write(filepath, arcname=filename)
     archive.close()
     return True
+
+
+def read_binary(archivepath, filelist):
+    """Read a list of files from an archive and return the file data as a
+    dictionary of filename, data key-value pairs.
+
+    :param archivepath: the path to the archive
+    :param filename: list of filenames to read
+    :return: dictionary with filename, data key-value pairs
+    """
+    datadict = dict()
+    if os.path.isfile(archivepath):
+        archive = zipfile.ZipFile(archivepath, mode='r')
+    else:
+        raise FileNotFoundError("Specified file does not exist")
+    for filename in filelist:
+        try:
+            datadict[filename] = archive.read(filename)
+        except KeyError:
+            datadict[filename] = None
+    return datadict
