@@ -48,3 +48,15 @@ def test_read_bin():
     assertions[1] = (datadict[filelist[1]] == control_data2)
 
     assert assertions == [True, True]
+
+
+def test_zip_extract():
+    archivepath = "./tests/testdata/test_archive2_deflate.zip"
+    filelist = ["test_sample1.txt", "test_sample2.txt"]
+    with tempfile.TemporaryDirectory() as tmpdir:
+        zip_handler.zip_extract(osp.abspath(archivepath), filelist,
+                                osp.abspath(tmpdir))
+
+        assertions = [osp.isfile(osp.abspath(tmpdir + '/' + filelist[0])),
+                      osp.isfile(osp.abspath(tmpdir + '/' + filelist[1]))]
+    assert assertions == [True, True]
