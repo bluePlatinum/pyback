@@ -66,3 +66,4 @@ def zip_extract(archivepath, filelist, extractpath):
     else:
         raise FileNotFoundError("Specified file does not exist")
     archive.extractall(path=extractpath, members=filelist)
+    archive.close()
