@@ -15,7 +15,7 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
     :return:
     """
     if os.path.isfile(archivepath):
-        return False
+        raise FileExistsError("Specified file already exists")
     else:
         archive = zipfile.ZipFile(archivepath, mode='x',
                                   compression=compression,
