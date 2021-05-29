@@ -25,7 +25,7 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
     archive.close()
 
 
-def read_binary(archivepath, filelist):
+def read_bin(archivepath, filelist):
     """Read a list of files from an archive and return the file data as a
     dictionary of filename, data key-value pairs.
 
