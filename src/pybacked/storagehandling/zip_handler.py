@@ -1,3 +1,4 @@
+import io
 import os
 import zipfile
 
@@ -40,7 +41,13 @@ def read_bin(archivepath, filelist):
         raise FileNotFoundError("Specified file does not exist")
     for filename in filelist:
         try:
-            datadict[filename] = archive.read(filename)
+            buffer = archive.open(filename)
+            wrapper = io.TextIOWrapper(buffer, newline=None)
+
+            datadict[filename] = wrapper.read()
+
+            wrapper.close()
+            buffer.close()
         except KeyError:
             datadict[filename] = None
     return datadict
