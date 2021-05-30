@@ -14,9 +14,18 @@ Welcome to pyback's documentation!
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Using pybacked
 
+   installation
+   quickstart
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Documentation
+
+   reference
+   changelog
 
 
 Indices and tables
