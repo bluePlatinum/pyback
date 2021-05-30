@@ -52,6 +52,7 @@ def read_bin(archivepath, filelist):
             buffer.close()
         except KeyError:
             datadict[filename] = None
+    archive.close()
     return datadict
 
 
