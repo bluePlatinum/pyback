@@ -4,13 +4,14 @@ import zipfile
 
 
 def zip_write(archivepath, filedict, compression, compressionlevel):
-    """Write filedict to zip-archive. Will check wether file at filepath exists
+    """
+    Write filedict to zip-archive. Will check wether file at filepath exists
     before writing. If file exists will return False, else will return True
     after complete write.
 
     :param filepath: the path to the file
     :param filedict: dictionary containing the filepath, filename key-value
-    pairs
+            pairs
     :param compression: desired compression methods (see zipfile documentation)
     :param compressionlevel: compression level (see zipfile documentation)
     :return: void
@@ -27,7 +28,8 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
 
 
 def read_bin(archivepath, filelist):
-    """Read a list of files from an archive and return the file data as a
+    """
+    Read a list of files from an archive and return the file data as a
     dictionary of filename, data key-value pairs.
 
     :param archivepath: the path to the archive
@@ -54,7 +56,8 @@ def read_bin(archivepath, filelist):
 
 
 def zip_extract(archivepath, filelist, extractpath):
-    """Extract a list of files to a specific location
+    """
+    Extract a list of files to a specific location
 
     :param archivepath: the path to the zip-archive
     :param filelist: list of member filenames to extract
