@@ -51,3 +51,19 @@ def read_bin(archivepath, filelist):
         except KeyError:
             datadict[filename] = None
     return datadict
+
+
+def zip_extract(archivepath, filelist, extractpath):
+    """Extract a list of files to a specific location
+
+    :param archivepath: the path to the zip-archive
+    :param filelist: list of member filenames to extract
+    :param extractpath: path for the extracted files
+    :return: void
+    """
+    if os.path.isfile(archivepath):
+        archive = zipfile.ZipFile(archivepath, mode='r')
+    else:
+        raise FileNotFoundError("Specified file does not exist")
+    archive.extractall(path=extractpath, members=filelist)
+    archive.close()
