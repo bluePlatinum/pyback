@@ -41,8 +41,6 @@ class DiffDate:
     Holds data to describe differences between file-versions detected by
     comparing last edited date.
 
-    :param filename_: The filename of the file where a diff was detected
-    :type filename_: str
     :param difftype_: The type of difference that was detetcted. (ie.
             '+' - file was created
             '-' - file was deleted
@@ -54,8 +52,7 @@ class DiffDate:
             last file-version which was archived
     :type previous_edit_: float
     """
-    def __init__(self, filename_, difftype_, last_edit_, previous_edit_=None):
-        self.filename = filename_
+    def __init__(self, difftype_, last_edit_, previous_edit_=None):
         self.difftype = difftype_
         self.last_edit = last_edit_
         self.previous_edit = previous_edit_
