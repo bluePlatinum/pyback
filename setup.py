@@ -11,6 +11,7 @@ setuptools.setup(
     url="https://github.com/bluePlatinum/pybacked",
     project_urls={
         "Bug Tracker": "https://github.com/bluePlatinum/pybacked/issues",
+        "Documentation": "https://pybacked.readthedocs.io/"
     },
     classifiers=[
         "Programming Language :: Python :: 3",
