@@ -5,12 +5,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    description="a simple backup utility",
+    description="A simple backup utility",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bluePlatinum/pybacked",
     project_urls={
         "Bug Tracker": "https://github.com/bluePlatinum/pybacked/issues",
+        "Documentation": "https://pybacked.readthedocs.io/"
     },
     classifiers=[
         "Programming Language :: Python :: 3",
