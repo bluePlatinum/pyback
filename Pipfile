@@ -15,6 +15,7 @@ twine = "*"
 build = "*"
 sphinx = "*"
 pybacked = {editable = true, path = "."}
+sphinx-rtd-theme = "*"
 
 [requires]
 python_version = "3"
