@@ -6,6 +6,13 @@
 Welcome to pyback's documentation!
 ==================================
 
+**FULL DISCLOSURE:**
+   This is in no way, shape or form the complete documentation as it will be in
+   it's final form. The structure is wrong and the content is flawed and/or
+   incomplete. This is just for me to keep building the documentation parallel
+   to the code.
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
