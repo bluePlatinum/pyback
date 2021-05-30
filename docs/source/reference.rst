@@ -13,6 +13,8 @@ Reference to all the Modules/Classes/Functions etc.
    :maxdepth: 2
    :caption: Control
 
+   control/diff
+
 
 .. toctree::
    :maxdepth: 2
