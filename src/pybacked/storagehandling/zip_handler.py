@@ -9,7 +9,7 @@ def zip_write(archivepath, filedict, compression, compressionlevel):
     before writing. If file exists will return False, else will return True
     after complete write.
 
-    :param filepath: the path to the file
+    :param archivepath: the path to the file
     :param filedict: dictionary containing the filepath, filename key-value
             pairs
     :param compression: desired compression methods (see zipfile documentation)
@@ -33,7 +33,7 @@ def read_bin(archivepath, filelist):
     dictionary of filename, data key-value pairs.
 
     :param archivepath: the path to the archive
-    :param filename: list of filenames to read
+    :param filelist: list of filenames to read
     :return: dictionary with filename, data key-value pairs
     """
     datadict = dict()
