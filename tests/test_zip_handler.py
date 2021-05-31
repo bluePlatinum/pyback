@@ -3,7 +3,7 @@ import os.path as osp
 import tempfile
 import zipfile
 
-from pybacked.storagehandling import zip_handler
+from pybacked import zip_handler
 
 
 def test_zip_write():

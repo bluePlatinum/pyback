@@ -1,5 +1,5 @@
 import time
-from pybacked.control import diff
+from pybacked import diff
 
 
 def test_diffcache_constructor_empty():
