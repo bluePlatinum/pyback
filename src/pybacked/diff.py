@@ -41,7 +41,7 @@ class DiffDate:
     Holds data to describe differences between file-versions detected by
     comparing last edited date.
 
-    :param difftype_: The type of difference that was detetcted. (ie.
+    :param difftype_: The type of difference that was detetcted.
             '+' - file was created
             '-' - file was deleted
             '*' - file was edited
