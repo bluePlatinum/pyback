@@ -10,14 +10,8 @@ Reference to all the Modules/Classes/Functions etc.
    package_structure
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Control
+   :maxdepth: 1
+   :caption: Modules
 
-   control/diff
-
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Storagehandling
-
-   storagehandling/zip_handler
+   modules/diff
+   modules/zip_handler
