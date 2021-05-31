@@ -41,7 +41,7 @@ class DiffDate:
     Holds data to describe differences between file-versions detected by
     comparing last edited date.
 
-    :param difftype_: The type of difference that was detetcted. (ie.
+    :param difftype_: The type of difference that was detetcted.
             '+' - file was created
             '-' - file was deleted
             '*' - file was edited
@@ -56,3 +56,21 @@ class DiffDate:
         self.difftype = difftype_
         self.last_edit = last_edit_
         self.previous_edit = previous_edit_
+
+
+class DiffHash:
+    """
+    Holds data to describe differences between file-versions detected by
+    comparing binary hashes.
+
+    :param difftype_: The type of difference that was detetcted.
+            '+' - file was created
+            '-' - file was deleted
+            '*' - file was edited
+    :type difftype_: str
+    :param currenthash_: the hash of the modified file
+    :type currenthash_: bytes object
+    """
+    def __init__(self, difftype_, currenthash_):
+        self. difftype = difftype_
+        self.currenthash = currenthash_
