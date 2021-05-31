@@ -1,5 +1,5 @@
 Diff Module
 ===========
 
-.. automodule:: pybacked.control.diff
+.. automodule:: pybacked.diff
     :members:

@@ -1,5 +1,5 @@
 Zip Handler
 ===========
 
-.. automodule:: pybacked.storagehandling.zip_handler
+.. automodule:: pybacked.zip_handler
     :members:
