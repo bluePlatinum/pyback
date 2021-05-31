@@ -1,5 +1,5 @@
 import time
-from pybacked import diff
+from pybacked import diff, HASH_SHA1
 
 
 def test_diffcache_constructor_empty():
@@ -46,4 +46,15 @@ def test_diffdate_constructor():
     assertions = [probe_object.difftype == difftype,
                   probe_object.last_edit == last_edit,
                   probe_object.previous_edit == previous_edit]
+    assert assertions == [True, True, True]
+
+
+def test_diffhash_constructor():
+    difftype = '+'
+    current_hash = b'123456'  # would be a hash in real usage
+    hash_algorithm = HASH_SHA1
+    probe_object = diff.DiffHash(difftype, current_hash, hash_algorithm)
+    assertions = [probe_object.difftype == difftype,
+                  probe_object.currenthash == current_hash,
+                  probe_object.hash_algorithm == hash_algorithm]
     assert assertions == [True, True, True]
