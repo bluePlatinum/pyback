@@ -70,7 +70,10 @@ class DiffHash:
     :type difftype_: str
     :param currenthash_: the hash of the modified file
     :type currenthash_: bytes object
+    :param hash_algorithm_: the applied hash algorithm
+    :type hash_algorithm_: str
     """
-    def __init__(self, difftype_, currenthash_):
+    def __init__(self, difftype_, currenthash_, hash_algorithm_):
         self. difftype = difftype_
         self.currenthash = currenthash_
+        self.hash_algorithm = hash_algorithm_
