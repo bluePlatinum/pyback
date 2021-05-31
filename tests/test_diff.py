@@ -1,3 +1,4 @@
+import time
 from pybacked.control import diff
 
 
@@ -35,3 +36,14 @@ def test_diffcache_remove_diff_2():
     probe_object = diff.DiffCache(initialdict=initial_dict)
     probe_object.remove_diff("filename")
     assert probe_object.diffdict == {}
+
+
+def test_diffdate_constructor():
+    difftype = '+'
+    previous_edit = time.time()
+    last_edit = time.time()
+    probe_object = diff.DiffDate(difftype, last_edit, previous_edit)
+    assertions = [probe_object.difftype == difftype,
+                  probe_object.last_edit == last_edit,
+                  probe_object.previous_edit == previous_edit]
+    assert assertions == [True, True, True]
