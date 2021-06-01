@@ -46,3 +46,24 @@ def test_find_diff_archive_failure():
     filename = "non_existent_file"
     diff_entry = restore.find_diff_archive(arch_path, filename)
     assert diff_entry is None
+
+
+def test_get_last_date1():
+    arch_path = os.path.abspath("./tests/testdata/archive_date")
+    filename = "test_sample1.txt"
+    expected_date = 31
+    assert restore.get_last_date(filename, arch_path) == expected_date
+
+
+def test_get_last_date2():
+    arch_path = os.path.abspath("./tests/testdata/archive_date")
+    filename = "test_sample2.txt"
+    expected_date = 22
+    assert restore.get_last_date(filename, arch_path) == expected_date
+
+
+def test_get_last_date3():
+    arch_path = os.path.abspath("./tests/testdata/archive_date")
+    filename = "test_sample3.txt"
+    expected_date = 33
+    assert restore.get_last_date(filename, arch_path) == expected_date

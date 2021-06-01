@@ -93,11 +93,12 @@ def get_last_date(filename, archivedir):
     archive_list = get_archive_list(archivedir)
     i = 0
     i_max = len(archive_list)
-    diff_entry = find_diff_archive(archive_list[i], filename)
-    while i < i_max:
-        while diff_entry is None:
-            i += 1
-            diff_entry = find_diff_archive(archive_list[i], filename)
+    diff_entry = None
+    while diff_entry is None:
+        if i == i_max:
+            break
+        diff_entry = find_diff_archive(archive_list[i], filename)
+        i += 1
     if diff_entry is None:
         return None
     else:
