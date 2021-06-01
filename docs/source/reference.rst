@@ -14,4 +14,5 @@ Reference to all the Modules/Classes/Functions etc.
    :caption: Modules
 
    modules/diff
+   modules/restore
    modules/zip_handler
