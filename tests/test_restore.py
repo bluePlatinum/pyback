@@ -13,7 +13,7 @@ def test_get_archive_list():
 
 
 def test_find_diff_success():
-    log_path = os.path.abspath("./tests/testdata/log.csv")
+    log_path = os.path.abspath("./tests/testdata/diff-log.csv")
     filename = "test_sample1.txt"
     expected_dict = {'filename': 'test_sample1.txt', 'modtype': '+',
                      'diff': '1622567933.365362'}
@@ -24,7 +24,7 @@ def test_find_diff_success():
 
 
 def test_find_diff_failure():
-    log_path = os.path.abspath("./tests/testdata/log.csv")
+    log_path = os.path.abspath("./tests/testdata/diff-log.csv")
     filename = "non_existent_file"
     log_file = io.open(log_path, "r")
     diff_entry = restore.find_diff(log_file, filename)
