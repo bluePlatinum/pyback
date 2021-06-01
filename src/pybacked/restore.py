@@ -1,5 +1,7 @@
 import csv
+import io
 import os
+import zipfile
 
 
 def find_diff(logfile, filename):
@@ -17,6 +19,29 @@ def find_diff(logfile, filename):
             return entry
     else:
         return None
+
+
+def find_diff_archive(archivepath, filename):
+    """
+    Find a diff-log occurance in an archive. If one exists return the diff
+    line. If the filename given is not found return 0
+    :param archivepath: The path of the archive
+    :param filename: The name of the desired file
+    :return: the diff-entry or None depending if filename was found
+    :rtype: dict
+    """
+    # This function eccentialy just opens the log-file inside the archive
+    # and wrapps it in a way that find_diff can understand
+    archive = zipfile.ZipFile(archivepath, mode='r')
+    diff_log_bytes = archive.open("diff-log.csv", mode='r')
+    diff_log = io.TextIOWrapper(diff_log_bytes, encoding="UTF-8", newline=None)
+
+    diff_entry = find_diff(diff_log, filename)
+
+    diff_log_bytes.close()
+    archive.close()
+
+    return diff_entry
 
 
 def get_archive_list(archivedir):
