@@ -75,3 +75,29 @@ def get_last_state(filename, archivedir, diff_detection_type):
     # populate as soon as you can!
     # this is just created to have a signature for the function
     pass
+
+
+def get_last_date(filename, archivedir):
+    """
+    Get the last edited date of the archived file version
+    :param filename: The filename searched for
+    :type filename: str
+    :param archivedir: The directory where the archive files are stored
+    :type archivedir: str
+    :return: The timestamp of the last edited date; or None if no reference to
+            the filename was found
+    :rtype: float
+    """
+    archive_list = get_archive_list(archivedir)
+    i = 0
+    i_max = len(archive_list)
+    diff_entry = find_diff_archive(archive_list[i], filename)
+    while i < i_max:
+        while diff_entry is None:
+            i += 1
+            diff_entry = find_diff_archive(archive_list[i], filename)
+    if diff_entry is None:
+        return None
+    else:
+        timestamp = float(diff_entry['diff'])
+        return timestamp
