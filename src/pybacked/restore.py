@@ -57,6 +57,8 @@ def get_archive_list(archivedir):
         if os.path.isfile(os.path.abspath(archivedir + '/' + member)):
             if member.find(".zip") > -1:
                 final_list.append(os.path.abspath(archivedir + '/' + member))
+    # invert order to have newest archive on [0]
+    final_list.sort(reverse=True)
     return final_list
 
 
