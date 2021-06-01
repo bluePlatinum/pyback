@@ -1,4 +1,26 @@
+import csv
+import io
 import os
+
+
+def find_diff(filepath, filename):
+    """
+    Find a diff-log occurance in a file. If one exists return the diff line.
+    If the filename given is not found return 0
+    :param filepath: the path of the log-file to be searched
+    :param filename: the name of the desired file
+    :return: the diff-entry or None depending if filename was found
+    :rtype: dict or None
+    """
+    log_file = io.open(filepath, "r")
+    csv_reader = csv.DictReader(log_file, delimiter=',')
+    for entry in csv_reader:
+        if entry["filename"] == filename:
+            log_file.close()
+            return entry
+    else:
+        log_file.close()
+        return None
 
 
 def get_archive_list(archivedir):
