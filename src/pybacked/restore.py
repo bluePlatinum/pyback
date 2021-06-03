@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import io
 import os
 import pybacked
@@ -61,6 +62,22 @@ def get_archive_list(archivedir):
     # invert order to have newest archive on [0]
     final_list.sort(reverse=True)
     return final_list
+
+
+def get_file_hash(filepath, algorithm):
+    """
+    Get hash of file
+    :param filepath: the path to the file
+    :type filepath: str
+    :param algorithm: the desired hashing algorithm
+    :type algorithm: str
+    :return: hex hash of the file
+    :rtype: str
+    """
+    file = io.open(filepath, "rb")
+    hash_handler = hashlib.new(algorithm)
+    hash_handler.update(file.read())
+    return hash_handler.hexdigest()
 
 
 def get_last_ed(filepath):
