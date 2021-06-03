@@ -54,7 +54,7 @@ def test_find_diff_archive_failure():
 
 def test_get_current_state1():
     filepath = os.path.abspath("./tests/testdata/test_sample1.txt")
-    expected_date = restore.get_last_ed(filepath)
+    expected_date = restore.get_edit_date(filepath)
     result = restore.get_current_state(filepath, DIFF_DATE)
     assert result == expected_date
 
@@ -83,10 +83,10 @@ def test_get_file_hash():
     assert restore.get_file_hash(filepath, HASH_SHA256) == expected_hash
 
 
-def test_get_last_edit():
+def test_get_edit_date():
     filepath = os.path.abspath("./tests/testdata/test_sample1.txt")
     expected_time = os.path.getmtime(filepath)
-    assert restore.get_last_ed(filepath) == expected_time
+    assert restore.get_edit_date(filepath) == expected_time
 
 
 def test_get_last_state1():

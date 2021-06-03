@@ -82,7 +82,7 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
     if diff_algorithm == pybacked.DIFF_HASH and hash_algorithm is None:
         raise ValueError("No hash algorithm selected")
     if diff_algorithm == pybacked.DIFF_DATE:
-        return get_last_ed(filepath)
+        return get_edit_date(filepath)
     elif diff_algorithm == pybacked.DIFF_HASH:
         return get_file_hash(filepath, hash_algorithm)
 
@@ -104,7 +104,7 @@ def get_file_hash(filepath, algorithm):
     return hash_handler.hexdigest()
 
 
-def get_last_ed(filepath):
+def get_edit_date(filepath):
     """
     (get last edit date)
     Return the unix timestamp for the last edit. This function is primarily
