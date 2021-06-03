@@ -38,6 +38,7 @@ class DiffCache:
 
 class DiffDate:
     """
+    LEGACY CODE
     Holds data to describe differences between file-versions detected by
     comparing last edited date.
 
@@ -60,6 +61,7 @@ class DiffDate:
 
 class DiffHash:
     """
+    LEGACY CODE
     Holds data to describe differences between file-versions detected by
     comparing binary hashes.
 
