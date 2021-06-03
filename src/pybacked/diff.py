@@ -77,3 +77,21 @@ class DiffHash:
         self. difftype = difftype_
         self.currenthash = currenthash_
         self.hash_algorithm = hash_algorithm_
+
+
+class Diff:
+    """
+    Holds data to define differences between file-versions
+
+    :param difftype_: The type of difference that was detetcted.
+            '+' - file was created
+            '-' - file was deleted
+            '*' - file was edited
+    :type difftype_: str
+    :param state: The newer state of the file. Depending on the
+            diff-algorithm used can either be a timestamp or a hex hash
+    :type state: float or str
+    """
+    def __init__(self, difftype_, state):
+        self.difftype = difftype_
+        self.state = state

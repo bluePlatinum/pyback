@@ -58,3 +58,12 @@ def test_diffhash_constructor():
                   probe_object.currenthash == current_hash,
                   probe_object.hash_algorithm == hash_algorithm]
     assert assertions == [True, True, True]
+
+
+def test_diff_constructor():
+    difftype = '+'
+    state = time.time()
+    probe_object = diff.Diff(difftype, state)
+    assertions = [probe_object.difftype == difftype,
+                  probe_object.state == state]
+    assert assertions == [True, True]
