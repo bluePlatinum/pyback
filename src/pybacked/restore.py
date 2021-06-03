@@ -64,6 +64,25 @@ def get_archive_list(archivedir):
     return final_list
 
 
+def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
+    """
+    Get the current state of the file
+    :param filepath: the path to the file
+    :type filepath: str
+    :param diff_algorithm: the diff algorithm used
+    :type diff_algorithm: int
+    :param hash_algorithm: the desired hash algorithm
+    :type hash_algorithm: str, optional
+    :return: return the current state
+    """
+    if diff_algorithm == pybacked.DIFF_HASH and hash_algorithm is None:
+        raise ValueError("No hash algorithm selected")
+    if diff_algorithm == pybacked.DIFF_DATE:
+        return get_last_ed(filepath)
+    elif diff_algorithm == pybacked.DIFF_HASH:
+        return get_file_hash(filepath, hash_algorithm)
+
+
 def get_file_hash(filepath, algorithm):
     """
     Get hash of file
