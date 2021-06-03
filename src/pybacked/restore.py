@@ -104,6 +104,7 @@ def get_file_hash(filepath, algorithm):
     file = io.open(filepath, "rb")
     hash_handler = hashlib.new(algorithm)
     hash_handler.update(file.read())
+    file.close()
     return hash_handler.hexdigest()
 
 
