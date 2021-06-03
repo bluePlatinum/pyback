@@ -89,33 +89,33 @@ def test_get_edit_date():
     assert restore.get_edit_date(filepath) == expected_time
 
 
-def test_get_last_state1():
+def test_get_arch_state1():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample1.txt"
     expected_date = 31
-    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    result = restore.get_arch_state(filename, arch_path, DIFF_DATE)
     assert result == expected_date
 
 
-def test_get_last_state2():
+def test_get_arch_state2():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample2.txt"
     expected_date = 22
-    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    result = restore.get_arch_state(filename, arch_path, DIFF_DATE)
     assert result == expected_date
 
 
-def test_get_last_state3():
+def test_get_arch_state3():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample3.txt"
     expected_date = 33
-    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    result = restore.get_arch_state(filename, arch_path, DIFF_DATE)
     assert result == expected_date
 
 
-def test_get_last_state_hash():
+def test_get_arch_state_hash():
     arch_path = os.path.abspath("./tests/testdata/archive_hash")
     filename = "test_sample1.txt"
     expected_hash = '59d9a6df06b9f610f7db8e036896ed03662d168f'
-    result = restore.get_last_state(filename, arch_path, DIFF_HASH)
+    result = restore.get_arch_state(filename, arch_path, DIFF_HASH)
     assert result == expected_hash

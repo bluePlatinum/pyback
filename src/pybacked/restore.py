@@ -117,7 +117,7 @@ def get_edit_date(filepath):
     return timestamp
 
 
-def get_last_state(filename, archivedir, diff_algorithm):
+def get_arch_state(filename, archivedir, diff_algorithm):
     """
     Get the last (diff) state of the archived file version.
 
