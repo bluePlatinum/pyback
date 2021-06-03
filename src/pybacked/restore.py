@@ -62,26 +62,9 @@ def get_archive_list(archivedir):
     return final_list
 
 
-def get_last_state(filename, archivedir, diff_detection_type):
+def get_last_state(filename, archivedir):
     """
-    Get the last state of the archived files
-    :param filename: the name of the file
-    :type filename: str
-    :param archivedir: the directory of the backup archive
-    :type archivedir: str
-    :param diff_detection_type: the diff algorithm used to detect changes to
-            the file
-    :type diff_detection_type: int
-    :return: the last state of the object (ie. last edited date, hash, etc.)
-    """
-    # populate as soon as you can!
-    # this is just created to have a signature for the function
-    pass
-
-
-def get_last_date(filename, archivedir):
-    """
-    Get the last edited date of the archived file version
+    Get the last (diff) state of the archived file version
     :param filename: The filename searched for
     :type filename: str
     :param archivedir: The directory where the archive files are stored
