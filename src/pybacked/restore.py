@@ -9,7 +9,8 @@ import zipfile
 def find_diff(logfile, filename):
     """
     Find a diff-log occurance in a file. If one exists return the diff line.
-    If the filename given is not found return 0
+    If the filename given is not found return 0.
+
     :param logfile: the csv log-file to be searched
     :param filename: the name of the desired file
     :return: the diff-entry or None depending if filename was found
@@ -26,7 +27,8 @@ def find_diff(logfile, filename):
 def find_diff_archive(archivepath, filename):
     """
     Find a diff-log occurance in an archive. If one exists return the diff
-    line. If the filename given is not found return 0
+    line. If the filename given is not found return 0.
+
     :param archivepath: The path of the archive
     :param filename: The name of the desired file
     :return: the diff-entry or None depending if filename was found
@@ -49,6 +51,7 @@ def find_diff_archive(archivepath, filename):
 def get_archive_list(archivedir):
     """
     Return a list of paths to all the backup archives.
+
     :param archivedir:
     :return: a list of paths to all the backup archives
     :rtype: list
@@ -66,7 +69,8 @@ def get_archive_list(archivedir):
 
 def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
     """
-    Get the current state of the file
+    Get the current state of the file.
+
     :param filepath: the path to the file
     :type filepath: str
     :param diff_algorithm: the diff algorithm used
@@ -85,7 +89,8 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
 
 def get_file_hash(filepath, algorithm):
     """
-    Get hash of file
+    Get hash of file.
+
     :param filepath: the path to the file
     :type filepath: str
     :param algorithm: the desired hashing algorithm
@@ -103,7 +108,8 @@ def get_last_ed(filepath):
     """
     (get last edit date)
     Return the unix timestamp for the last edit. This function is primarily
-    implemented for increasing readability
+    implemented for increasing readability.
+
     :param filepath: the filename
     :return: timestamp of the last edited date
     :rtype: float
@@ -114,7 +120,8 @@ def get_last_ed(filepath):
 
 def get_last_state(filename, archivedir, diff_algorithm):
     """
-    Get the last (diff) state of the archived file version
+    Get the last (diff) state of the archived file version.
+
     :param filename: The filename searched for
     :type filename: str
     :param archivedir: The directory where the archive files are stored
