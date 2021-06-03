@@ -106,7 +106,6 @@ def get_file_hash(filepath, algorithm):
 
 def get_edit_date(filepath):
     """
-    (get last edit date)
     Return the unix timestamp for the last edit. This function is primarily
     implemented for increasing readability.
 
