@@ -77,8 +77,11 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
     :type diff_algorithm: int
     :param hash_algorithm: the desired hash algorithm
     :type hash_algorithm: str, optional
-    :return: return the current state
+    :return: return the current state, or None if file doesn't exist
     """
+    if os.path.isfile(filepath) is False:
+        return None
+
     if diff_algorithm == pybacked.DIFF_HASH and hash_algorithm is None:
         raise ValueError("No hash algorithm selected")
     if diff_algorithm == pybacked.DIFF_DATE:

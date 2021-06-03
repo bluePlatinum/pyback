@@ -67,6 +67,13 @@ def test_get_current_state2():
     assert result == expected_hash
 
 
+def test_get_current_state_none():
+    filepath = os.path.abspath("./tests/testdata/non-existent-file.txt")
+    expected_state = None
+    result = restore.get_current_state(filepath, DIFF_DATE)
+    assert result == expected_state
+
+
 def test_get_current_state_exception():
     filepath = os.path.abspath(
         "./tests/testdata/archive_hash/test_sample1.txt")
