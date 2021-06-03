@@ -1,5 +1,6 @@
 import io
 import os
+from pybacked import DIFF_DATE, DIFF_HASH
 from pybacked import restore
 
 
@@ -48,22 +49,33 @@ def test_find_diff_archive_failure():
     assert diff_entry is None
 
 
-def test_get_last_date1():
+def test_get_last_state1():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample1.txt"
     expected_date = 31
-    assert restore.get_last_state(filename, arch_path) == expected_date
+    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    assert result == expected_date
 
 
-def test_get_last_date2():
+def test_get_last_state2():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample2.txt"
     expected_date = 22
-    assert restore.get_last_state(filename, arch_path) == expected_date
+    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    assert result == expected_date
 
 
-def test_get_last_date3():
+def test_get_last_state3():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample3.txt"
     expected_date = 33
-    assert restore.get_last_state(filename, arch_path) == expected_date
+    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    assert result == expected_date
+
+
+def test_get_last_state_hash():
+    arch_path = os.path.abspath("./tests/testdata/archive_hash")
+    filename = "test_sample1.txt"
+    expected_hash = '59d9a6df06b9f610f7db8e036896ed03662d168f'
+    result = restore.get_last_state(filename, arch_path, DIFF_HASH)
+    assert result == expected_hash
