@@ -1,6 +1,7 @@
 import csv
 import io
 import os
+import pybacked
 import zipfile
 
 
@@ -62,16 +63,16 @@ def get_archive_list(archivedir):
     return final_list
 
 
-def get_last_state(filename, archivedir):
+def get_last_state(filename, archivedir, diff_algorithm):
     """
     Get the last (diff) state of the archived file version
     :param filename: The filename searched for
     :type filename: str
     :param archivedir: The directory where the archive files are stored
     :type archivedir: str
-    :return: The timestamp of the last edited date; or None if no reference to
-            the filename was found
-    :rtype: float
+    :param diff_algorithm: The diff-detection algorithm used
+    :type diff_algorithm: int
+    :return: the last state (diff) of the archived file
     """
     archive_list = get_archive_list(archivedir)
     i = 0
@@ -85,5 +86,7 @@ def get_last_state(filename, archivedir):
     if diff_entry is None:
         return None
     else:
-        timestamp = float(diff_entry['diff'])
-        return timestamp
+        if diff_algorithm == pybacked.DIFF_DATE:
+            return float(diff_entry['diff'])
+        elif diff_algorithm == pybacked.DIFF_HASH:
+            return diff_entry['diff']
