@@ -1,3 +1,8 @@
+import os
+from pybacked import DIFF_HASH
+from pybacked import restore
+
+
 class DiffCache:
     """
     Used to hold file difference information.
@@ -38,6 +43,7 @@ class DiffCache:
 
 class DiffDate:
     """
+    LEGACY CODE
     Holds data to describe differences between file-versions detected by
     comparing last edited date.
 
@@ -60,6 +66,7 @@ class DiffDate:
 
 class DiffHash:
     """
+    LEGACY CODE
     Holds data to describe differences between file-versions detected by
     comparing binary hashes.
 
@@ -77,3 +84,65 @@ class DiffHash:
         self. difftype = difftype_
         self.currenthash = currenthash_
         self.hash_algorithm = hash_algorithm_
+
+
+class Diff:
+    """
+    Holds data to define differences between file-versions
+
+    :param difftype_: The type of difference that was detetcted.
+            '+' - file was created
+            '-' - file was deleted
+            '*' - file was edited
+    :type difftype_: str
+    :param state: The newer state of the file. Depending on the
+            diff-algorithm used can either be a timestamp or a hex hash
+    :type state: float or str
+    """
+    def __init__(self, difftype_, state):
+        self.difftype = difftype_
+        self.state = state
+
+
+def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None):
+    """
+    Detect difference between a working file and an archived file. Meaning
+    this function detects whether there has been a change in the file since
+    the last archiving cycle
+
+    :param filepath: The path of the inspected file
+    :type filepath: str
+    :param archive_dir: The directory of the archive
+    :type archive_dir: str
+    :param diff_algorithm: The diff-detection algorithm used - one of DIFF_DATE
+            or DIFF_HASH
+    :type diff_algorithm: int
+    :param hash_algorithm: The desired hashing algorithm
+    :type hash_algorithm: str
+    :return: The diff class which corresponds to the file change or None if the
+            file didn't change.
+    """
+    if diff_algorithm == DIFF_HASH and hash_algorithm is None:
+        raise ValueError("No hash algorithm selected")
+
+    filename = os.path.basename(os.path.abspath(filepath))
+
+    arch_state = restore.get_arch_state(filename, archive_dir,
+                                        diff_algorithm)
+    current_state = restore.get_current_state(filepath, diff_algorithm,
+                                              hash_algorithm)
+    if arch_state != current_state:
+        if arch_state is None:
+            # if the file doesn't exist in the archives, then it was added
+            diff_type = "+"
+        elif current_state is None:
+            # if the file doesn't exist in the current state, then it was
+            # removed
+            diff_type = '-'
+        else:
+            # if the file existed in both archive and current, then it was
+            # edited
+            diff_type = '*'
+        return Diff(diff_type, current_state)
+    else:
+        return None

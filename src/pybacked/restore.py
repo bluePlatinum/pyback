@@ -77,12 +77,15 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
     :type diff_algorithm: int
     :param hash_algorithm: the desired hash algorithm
     :type hash_algorithm: str, optional
-    :return: return the current state
+    :return: return the current state, or None if file doesn't exist
     """
+    if os.path.isfile(filepath) is False:
+        return None
+
     if diff_algorithm == pybacked.DIFF_HASH and hash_algorithm is None:
         raise ValueError("No hash algorithm selected")
     if diff_algorithm == pybacked.DIFF_DATE:
-        return get_last_ed(filepath)
+        return get_edit_date(filepath)
     elif diff_algorithm == pybacked.DIFF_HASH:
         return get_file_hash(filepath, hash_algorithm)
 
@@ -101,12 +104,12 @@ def get_file_hash(filepath, algorithm):
     file = io.open(filepath, "rb")
     hash_handler = hashlib.new(algorithm)
     hash_handler.update(file.read())
+    file.close()
     return hash_handler.hexdigest()
 
 
-def get_last_ed(filepath):
+def get_edit_date(filepath):
     """
-    (get last edit date)
     Return the unix timestamp for the last edit. This function is primarily
     implemented for increasing readability.
 
@@ -118,7 +121,7 @@ def get_last_ed(filepath):
     return timestamp
 
 
-def get_last_state(filename, archivedir, diff_algorithm):
+def get_arch_state(filename, archivedir, diff_algorithm):
     """
     Get the last (diff) state of the archived file version.
 

@@ -1,5 +1,8 @@
+import os
 import time
-from pybacked import diff, HASH_SHA1
+import pytest
+from pybacked import DIFF_HASH, HASH_SHA1, HASH_SHA256
+from pybacked import diff, restore
 
 
 def test_diffcache_constructor_empty():
@@ -58,3 +61,81 @@ def test_diffhash_constructor():
                   probe_object.currenthash == current_hash,
                   probe_object.hash_algorithm == hash_algorithm]
     assert assertions == [True, True, True]
+
+
+def test_diff_constructor():
+    difftype = '+'
+    state = time.time()
+    probe_object = diff.Diff(difftype, state)
+    assertions = [probe_object.difftype == difftype,
+                  probe_object.state == state]
+    assert assertions == [True, True]
+
+
+class TestDetect:
+    # check test_sample1.txt
+    def test_detect1(self):
+        filepath = os.path.abspath(
+            "./tests/testdata/archive_hash/test_sample1.txt")
+        archive_path = os.path.abspath(
+            "./tests/testdata/archive_hash")
+        expected_difftype = '*'
+        expected_state = restore.get_file_hash(filepath, HASH_SHA256)
+
+        probe_diff = diff.detect(filepath, archive_path, DIFF_HASH,
+                                 HASH_SHA256)
+
+        assert probe_diff.difftype == expected_difftype
+        assert probe_diff.state == expected_state
+
+    # check test_sample2.txt
+    def test_detect2(self):
+        filepath = os.path.abspath(
+            "./tests/testdata/archive_hash/test_sample2.txt")
+        archive_path = os.path.abspath(
+            "./tests/testdata/archive_hash")
+        expected_difftype = '-'
+        expected_state = None
+
+        probe_diff = diff.detect(filepath, archive_path, DIFF_HASH,
+                                 HASH_SHA256)
+
+        assert probe_diff.difftype == expected_difftype
+        assert probe_diff.state == expected_state
+
+    # check test_sample3.txt
+    def test_detect3(self):
+        filepath = os.path.abspath(
+            "./tests/testdata/archive_hash/test_sample3.txt")
+        archive_path = os.path.abspath(
+            "./tests/testdata/archive_hash")
+
+        probe_diff = diff.detect(filepath, archive_path, DIFF_HASH,
+                                 HASH_SHA256)
+
+        assert probe_diff is None
+
+    # check test_sample4.txt
+    def test_detect4(self):
+        filepath = os.path.abspath(
+            "./tests/testdata/archive_hash/test_sample4.txt")
+        archive_path = os.path.abspath(
+            "./tests/testdata/archive_hash")
+        expected_difftype = '+'
+        expected_state = restore.get_file_hash(filepath, HASH_SHA256)
+
+        probe_diff = diff.detect(filepath, archive_path, DIFF_HASH,
+                                 HASH_SHA256)
+
+        assert probe_diff.difftype == expected_difftype
+        assert probe_diff.state == expected_state
+
+    # check for exception occuring if hash algorithm isn't provided but diff
+    # detection is set to DIFF_HASH
+    def test_detect_exception(self):
+        filepath = os.path.abspath(
+            "./tests/testdata/archive_hash/test_sample4.txt")
+        archive_path = os.path.abspath(
+            "./tests/testdata/archive_hash")
+        with pytest.raises(ValueError):
+            diff.detect(filepath, archive_path, DIFF_HASH)

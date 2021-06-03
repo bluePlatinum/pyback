@@ -54,7 +54,7 @@ def test_find_diff_archive_failure():
 
 def test_get_current_state1():
     filepath = os.path.abspath("./tests/testdata/test_sample1.txt")
-    expected_date = restore.get_last_ed(filepath)
+    expected_date = restore.get_edit_date(filepath)
     result = restore.get_current_state(filepath, DIFF_DATE)
     assert result == expected_date
 
@@ -65,6 +65,13 @@ def test_get_current_state2():
     expected_hash = restore.get_file_hash(filepath, HASH_SHA256)
     result = restore.get_current_state(filepath, DIFF_HASH, HASH_SHA256)
     assert result == expected_hash
+
+
+def test_get_current_state_none():
+    filepath = os.path.abspath("./tests/testdata/non-existent-file.txt")
+    expected_state = None
+    result = restore.get_current_state(filepath, DIFF_DATE)
+    assert result == expected_state
 
 
 def test_get_current_state_exception():
@@ -83,39 +90,39 @@ def test_get_file_hash():
     assert restore.get_file_hash(filepath, HASH_SHA256) == expected_hash
 
 
-def test_get_last_edit():
+def test_get_edit_date():
     filepath = os.path.abspath("./tests/testdata/test_sample1.txt")
     expected_time = os.path.getmtime(filepath)
-    assert restore.get_last_ed(filepath) == expected_time
+    assert restore.get_edit_date(filepath) == expected_time
 
 
-def test_get_last_state1():
+def test_get_arch_state1():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample1.txt"
     expected_date = 31
-    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    result = restore.get_arch_state(filename, arch_path, DIFF_DATE)
     assert result == expected_date
 
 
-def test_get_last_state2():
+def test_get_arch_state2():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample2.txt"
     expected_date = 22
-    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    result = restore.get_arch_state(filename, arch_path, DIFF_DATE)
     assert result == expected_date
 
 
-def test_get_last_state3():
+def test_get_arch_state3():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample3.txt"
     expected_date = 33
-    result = restore.get_last_state(filename, arch_path, DIFF_DATE)
+    result = restore.get_arch_state(filename, arch_path, DIFF_DATE)
     assert result == expected_date
 
 
-def test_get_last_state_hash():
+def test_get_arch_state_hash():
     arch_path = os.path.abspath("./tests/testdata/archive_hash")
     filename = "test_sample1.txt"
     expected_hash = '59d9a6df06b9f610f7db8e036896ed03662d168f'
-    result = restore.get_last_state(filename, arch_path, DIFF_HASH)
+    result = restore.get_arch_state(filename, arch_path, DIFF_HASH)
     assert result == expected_hash
