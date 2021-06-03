@@ -63,6 +63,19 @@ def get_archive_list(archivedir):
     return final_list
 
 
+def get_last_ed(filepath):
+    """
+    (get last edit date)
+    Return the unix timestamp for the last edit. This function is primarily
+    implemented for increasing readability
+    :param filepath: the filename
+    :return: timestamp of the last edited date
+    :rtype: float
+    """
+    timestamp = os.path.getmtime(filepath)
+    return timestamp
+
+
 def get_last_state(filename, archivedir, diff_algorithm):
     """
     Get the last (diff) state of the archived file version
