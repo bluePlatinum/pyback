@@ -1,3 +1,4 @@
+import hashlib
 import io
 import os
 import pytest
@@ -76,8 +77,9 @@ def test_get_current_state_exception():
 def test_get_file_hash():
     filepath = os.path.abspath(
         "./tests/testdata/archive_hash/test_sample1.txt")
-    expected_hash = \
-        'a5479f2103b803ed4e100ee67f6c266fc1aa92a8ab86c88a46ba9f3f168e196f'
+    file = io.open(filepath, "rb")
+    hash_handler = hashlib.sha256(file.read())
+    expected_hash = hash_handler.hexdigest()
     assert restore.get_file_hash(filepath, HASH_SHA256) == expected_hash
 
 
