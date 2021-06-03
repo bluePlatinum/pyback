@@ -49,6 +49,12 @@ def test_find_diff_archive_failure():
     assert diff_entry is None
 
 
+def test_get_last_edit():
+    filepath = os.path.abspath("./tests/testdata/test_sample1.txt")
+    expected_time = os.path.getmtime(filepath)
+    assert restore.get_last_ed(filepath) == expected_time
+
+
 def test_get_last_state1():
     arch_path = os.path.abspath("./tests/testdata/archive_date")
     filename = "test_sample1.txt"
