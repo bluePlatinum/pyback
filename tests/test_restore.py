@@ -1,5 +1,6 @@
 import io
 import os
+from pybacked import HASH_SHA256
 from pybacked import DIFF_DATE, DIFF_HASH
 from pybacked import restore
 
@@ -47,6 +48,14 @@ def test_find_diff_archive_failure():
     filename = "non_existent_file"
     diff_entry = restore.find_diff_archive(arch_path, filename)
     assert diff_entry is None
+
+
+def test_get_file_hash():
+    filepath = os.path.abspath(
+        "./tests/testdata/archive_hash/test_sample1.txt")
+    expected_hash = \
+        'a5479f2103b803ed4e100ee67f6c266fc1aa92a8ab86c88a46ba9f3f168e196f'
+    assert restore.get_file_hash(filepath, HASH_SHA256) == expected_hash
 
 
 def test_get_last_edit():
