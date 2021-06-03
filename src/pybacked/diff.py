@@ -107,7 +107,7 @@ class Diff:
 def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None):
     """
     Detect difference between a working file and an archived file. Meaning
-    this function detects wethere there has been a change in the file since
+    this function detects whether there has been a change in the file since
     the last archiving cycle
 
     :param filepath: The path of the inspected file
