@@ -8,37 +8,55 @@ from pybacked import diff, restore
 def test_diffcache_constructor_empty():
     probe_object = diff.DiffCache()
     assert probe_object.diffdict == {}
+    assert probe_object.dirflags == {}
 
 
-def test_diffcache_constructor_initial():
+def test_diffcache_constructor_initialdict():
     initial_dict = {"filename": "would be a diff object"}
     probe_object = diff.DiffCache(initialdict=initial_dict)
     assert probe_object.diffdict == initial_dict
 
 
+def test_diffcache_constructor_initialdirflags():
+    initial_dirflags = {"filename": True}
+    probe_object = diff.DiffCache(initialdirflags=initial_dirflags)
+    assert probe_object.dirflags == initial_dirflags
+
+
 def test_diffcache_add_diff():
     initial_dict = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": False}
     additional_diff = ["filename2", "would be a diff object2"]
-    expected_dict = {"filename": "would be a diff object",
+    expected_diff = {"filename": "would be a diff object",
                      "filename2": "would be a diff object2"}
-    probe_object = diff.DiffCache(initialdict=initial_dict)
-    probe_object.add_diff(additional_diff[0], additional_diff[1])
-    assert probe_object.diffdict == expected_dict
+    expected_dirflags = {"filename": False, "filename2": True}
+    probe_object = diff.DiffCache(initialdict=initial_dict,
+                                  initialdirflags=initial_dirflags)
+    probe_object.add_diff(additional_diff[0], additional_diff[1], True)
+    assert probe_object.diffdict == expected_diff
+    assert probe_object.dirflags == expected_dirflags
 
 
 def test_diffcache_remove_diff_1():
     # test the return of .remove_diff()
-    initial_dict = {"filename": "would be a diff object"}
-    probe_object = diff.DiffCache(initialdict=initial_dict)
-    assert probe_object.remove_diff("filename") == "would be a diff object"
+    initial_diff = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": False}
+    probe_object = diff.DiffCache(initialdict=initial_diff,
+                                  initialdirflags=initial_dirflags)
+    removed_diff, removed_flags = probe_object.remove_diff("filename")
+    assert removed_diff == "would be a diff object"
+    assert removed_flags is False
 
 
 def test_diffcache_remove_diff_2():
     # test the resulting dictionary of .remove_diff()
-    initial_dict = {"filename": "would be a diff object"}
-    probe_object = diff.DiffCache(initialdict=initial_dict)
+    initial_diff = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": False}
+    probe_object = diff.DiffCache(initialdict=initial_diff,
+                                  initialdirflags=initial_dirflags)
     probe_object.remove_diff("filename")
     assert probe_object.diffdict == {}
+    assert probe_object.dirflags == {}
 
 
 def test_diffdate_constructor():

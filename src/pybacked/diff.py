@@ -9,36 +9,49 @@ class DiffCache:
 
     :param initialdict: Initial dictionary which will be copied into diffdict
     :type initialdict: dict, optional
+    :param initialdirflags: Initial dir flags dictionary
+    :type initialdirflags: dict, optional
     """
-    def __init__(self, initialdict=None):
+    def __init__(self, initialdict=None, initialdirflags=None):
         if initialdict is None:
             self.diffdict = dict()
         else:
             self.diffdict = initialdict
 
-    def add_diff(self, filename, diffobj):
-        """
-        Add a diff reference to diffdict
+        if initialdirflags is None:
+            self.dirflags = dict()
+        else:
+            self.dirflags = initialdirflags
 
-        :param filename: The filename of the diff to be added
-        :type filename: str
+    def add_diff(self, location, diffobj, is_dir):
+        """
+        Add a diff reference to diffdict and dirflags.
+
+        :param location: The name of the inspected location (dir or file)
+        :type location: str
         :param diffobj: The diff-object which will hold different information
                 depending on the diff-detection algorithm
         :type diffobj: Diff object
+        :param is_dir: Flag to be set if the added location is a dir
+        :type is_dir: bool
         :return: void
+        :rtype: None
         """
-        self.diffdict[filename] = diffobj
+        self.diffdict[location] = diffobj
+        self.dirflags[location] = is_dir
 
-    def remove_diff(self, filename):
+    def remove_diff(self, location):
         """
-        Remove a diff reference from diffdict
+        Remove a diff reference from diffdict and dirflags.
 
-        :param filename: The filename of the diff to be removed
-        :type filename: str
-        :return: the diff under the filename key
-        :rtype: Diff object
+        :param location: The location-name of the diff to be removed
+        :type location: str
+        :return: the diff and the dir-flag under the location-name key
+        :rtype: Diff object, bool
         """
-        return self.diffdict.pop(filename)
+        removed_diff = self.diffdict.pop(location)
+        removed_flag = self.dirflags.pop(location)
+        return removed_diff, removed_flag
 
 
 class DiffDate:
