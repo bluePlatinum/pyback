@@ -117,7 +117,8 @@ class Diff:
         self.state = state
 
 
-def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None):
+def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None,
+           subdir=""):
     """
     Detect difference between a working file and an archived file. Meaning
     this function detects whether there has been a change in the file since
@@ -132,13 +133,15 @@ def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None):
     :type diff_algorithm: int
     :param hash_algorithm: The desired hashing algorithm
     :type hash_algorithm: str
+    :param subdir: The subdirectory prefix for the filename
+    :type subdir: str, optional
     :return: The diff class which corresponds to the file change or None if the
             file didn't change.
     """
     if diff_algorithm == DIFF_HASH and hash_algorithm is None:
         raise ValueError("No hash algorithm selected")
 
-    filename = os.path.basename(os.path.abspath(filepath))
+    filename = subdir + os.path.basename(os.path.abspath(filepath))
 
     arch_state = restore.get_arch_state(filename, archive_dir,
                                         diff_algorithm)
@@ -159,3 +162,44 @@ def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None):
         return Diff(diff_type, current_state)
     else:
         return None
+
+
+def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
+            subdir=""):
+    """
+    Collects all the diff information for an entire storage directory.
+
+    :param storage_dir: The storage directory
+    :type storage_dir: str
+    :param archive_dir: The archive directory
+    :type archive_dir: str
+    :param diff_algorithm: The desired diff algorithm - one of DIFF_DATE or
+            DIFF_HASH
+    :type diff_algorithm: int
+    :param hash_algorithm: The desired hash algorithm.
+    :type hash_algorithm: str
+    :param subdir: The subdirectory prefix for the filename
+    :type subdir: str, optional
+    :return: The DiffCache object holding the diff information
+    """
+    # check if hash algorithm is set
+    if diff_algorithm == DIFF_HASH and hash_algorithm is None:
+        raise ValueError("No hash algorithm selected")
+
+    diff_cache = DiffCache()
+
+    for member in os.listdir(storage_dir):
+        member_path = os.path.abspath(storage_dir + "/" + member)
+        # if member is a directory run cullect() on said dir
+        if os.path.isdir(member_path):
+            new_subdir = subdir + os.path.basename(member_path)
+
+            diff = collect(member_path, archive_dir, diff_algorithm,
+                           hash_algorithm, new_subdir),
+            diff_cache.add_diff(member_path, diff, True)
+        # if member is a file detect the differences and add them to diff_cache
+        else:
+            diff = detect(member_path, archive_dir, diff_algorithm,
+                          hash_algorithm, subdir)
+            diff_cache.add_diff(member_path, diff, False)
+    return diff_cache
