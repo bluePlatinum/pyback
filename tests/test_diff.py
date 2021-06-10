@@ -1,6 +1,7 @@
 import time
 import pytest
 from os.path import abspath as abspath
+from os.path import getmtime as getmtime
 from pybacked import DIFF_DATE, DIFF_HASH, HASH_SHA1, HASH_SHA256
 from pybacked import diff, restore
 
@@ -184,11 +185,15 @@ class TestCollect:
         expected_cache = diff.DiffCache()
 
         expected_cache.add_diff(abspath(storage + "/doc1.txt"),
-                                diff.Diff("*", 1623193700.0963135), False)
+                                diff.Diff("*", getmtime(
+                                    abspath(storage + "/doc1.txt")
+                                )), False)
 
         # create DiffCache for subdir/subdir
         subsub_initialdict = {abspath(storage + "/subdir/subdir/doc4.txt"):
-                              diff.Diff("*", 1623344137.0038738)}
+                              diff.Diff("*", getmtime(
+                                  abspath(storage + "/subdir/subdir/doc4.txt")
+                              ))}
 
         subsub_dirflags = {abspath(storage + "/subdir/subdir/doc4.txt"): False}
         subsub_diffcache = diff.DiffCache(initialdict=subsub_initialdict,
@@ -196,9 +201,11 @@ class TestCollect:
 
         # create DiffCache for subdir
         sub_initialdict = {abspath(storage + "/subdir/doc2.txt"):
-                           diff.Diff("*", 1623193748.9349601),
+                           diff.Diff("*", getmtime(
+                               abspath(storage + "/subdir/doc2.txt"))),
                            abspath(storage + "/subdir/doc3.txt"):
-                           diff.Diff("*", 1623193786.316759),
+                           diff.Diff("*", getmtime(
+                               abspath(storage + "/subdir/doc3.txt"))),
                            abspath(storage + "/subdir/subdir"):
                            subsub_diffcache}
         sub_initialdirflags = {abspath(storage + "/subdir/doc2.txt"): False,
