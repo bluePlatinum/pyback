@@ -1,0 +1,5 @@
+filename,modtype,diff
+doc1.txt,+,1623193700.0963135
+subdir/doc2.txt,+,1623193748.9349601
+subdir/doc3.txt,+,1623193786.316759
+subdir/subdir/doc4.txt,+,1623344137.0038738

@@ -1,44 +1,73 @@
-import os
 import time
 import pytest
-from pybacked import DIFF_HASH, HASH_SHA1, HASH_SHA256
+from os.path import abspath as abspath
+from os.path import getmtime as getmtime
+from pybacked import DIFF_DATE, DIFF_HASH, HASH_SHA1, HASH_SHA256
 from pybacked import diff, restore
 
 
 def test_diffcache_constructor_empty():
     probe_object = diff.DiffCache()
     assert probe_object.diffdict == {}
+    assert probe_object.dirflags == {}
 
 
-def test_diffcache_constructor_initial():
+def test_diffcache_constructor_initialdict():
     initial_dict = {"filename": "would be a diff object"}
     probe_object = diff.DiffCache(initialdict=initial_dict)
     assert probe_object.diffdict == initial_dict
 
 
+def test_diffcache_constructor_initialdirflags():
+    initial_dirflags = {"filename": True}
+    probe_object = diff.DiffCache(initialdirflags=initial_dirflags)
+    assert probe_object.dirflags == initial_dirflags
+
+
+def test_diffcache_comparison():
+    initial_dict = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": True}
+    cache1 = diff.DiffCache(initialdict=initial_dict,
+                            initialdirflags=initial_dirflags)
+    cache2 = diff.DiffCache(initialdict=initial_dict,
+                            initialdirflags=initial_dirflags)
+    assert cache1 == cache2
+
+
 def test_diffcache_add_diff():
     initial_dict = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": False}
     additional_diff = ["filename2", "would be a diff object2"]
-    expected_dict = {"filename": "would be a diff object",
+    expected_diff = {"filename": "would be a diff object",
                      "filename2": "would be a diff object2"}
-    probe_object = diff.DiffCache(initialdict=initial_dict)
-    probe_object.add_diff(additional_diff[0], additional_diff[1])
-    assert probe_object.diffdict == expected_dict
+    expected_dirflags = {"filename": False, "filename2": True}
+    probe_object = diff.DiffCache(initialdict=initial_dict,
+                                  initialdirflags=initial_dirflags)
+    probe_object.add_diff(additional_diff[0], additional_diff[1], True)
+    assert probe_object.diffdict == expected_diff
+    assert probe_object.dirflags == expected_dirflags
 
 
 def test_diffcache_remove_diff_1():
     # test the return of .remove_diff()
-    initial_dict = {"filename": "would be a diff object"}
-    probe_object = diff.DiffCache(initialdict=initial_dict)
-    assert probe_object.remove_diff("filename") == "would be a diff object"
+    initial_diff = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": False}
+    probe_object = diff.DiffCache(initialdict=initial_diff,
+                                  initialdirflags=initial_dirflags)
+    removed_diff, removed_flags = probe_object.remove_diff("filename")
+    assert removed_diff == "would be a diff object"
+    assert removed_flags is False
 
 
 def test_diffcache_remove_diff_2():
     # test the resulting dictionary of .remove_diff()
-    initial_dict = {"filename": "would be a diff object"}
-    probe_object = diff.DiffCache(initialdict=initial_dict)
+    initial_diff = {"filename": "would be a diff object"}
+    initial_dirflags = {"filename": False}
+    probe_object = diff.DiffCache(initialdict=initial_diff,
+                                  initialdirflags=initial_dirflags)
     probe_object.remove_diff("filename")
     assert probe_object.diffdict == {}
+    assert probe_object.dirflags == {}
 
 
 def test_diffdate_constructor():
@@ -72,12 +101,18 @@ def test_diff_constructor():
     assert assertions == [True, True]
 
 
+def test_diff_comparison():
+    diff_obj1 = diff.Diff("*", 1)
+    diff_obj2 = diff.Diff("*", 1)
+    assert diff_obj1 == diff_obj2
+
+
 class TestDetect:
     # check test_sample1.txt
     def test_detect1(self):
-        filepath = os.path.abspath(
+        filepath = abspath(
             "./tests/testdata/archive_hash/test_sample1.txt")
-        archive_path = os.path.abspath(
+        archive_path = abspath(
             "./tests/testdata/archive_hash")
         expected_difftype = '*'
         expected_state = restore.get_file_hash(filepath, HASH_SHA256)
@@ -90,9 +125,9 @@ class TestDetect:
 
     # check test_sample2.txt
     def test_detect2(self):
-        filepath = os.path.abspath(
+        filepath = abspath(
             "./tests/testdata/archive_hash/test_sample2.txt")
-        archive_path = os.path.abspath(
+        archive_path = abspath(
             "./tests/testdata/archive_hash")
         expected_difftype = '-'
         expected_state = None
@@ -105,9 +140,9 @@ class TestDetect:
 
     # check test_sample3.txt
     def test_detect3(self):
-        filepath = os.path.abspath(
+        filepath = abspath(
             "./tests/testdata/archive_hash/test_sample3.txt")
-        archive_path = os.path.abspath(
+        archive_path = abspath(
             "./tests/testdata/archive_hash")
 
         probe_diff = diff.detect(filepath, archive_path, DIFF_HASH,
@@ -117,9 +152,9 @@ class TestDetect:
 
     # check test_sample4.txt
     def test_detect4(self):
-        filepath = os.path.abspath(
+        filepath = abspath(
             "./tests/testdata/archive_hash/test_sample4.txt")
-        archive_path = os.path.abspath(
+        archive_path = abspath(
             "./tests/testdata/archive_hash")
         expected_difftype = '+'
         expected_state = restore.get_file_hash(filepath, HASH_SHA256)
@@ -133,9 +168,55 @@ class TestDetect:
     # check for exception occuring if hash algorithm isn't provided but diff
     # detection is set to DIFF_HASH
     def test_detect_exception(self):
-        filepath = os.path.abspath(
+        filepath = abspath(
             "./tests/testdata/archive_hash/test_sample4.txt")
-        archive_path = os.path.abspath(
+        archive_path = abspath(
             "./tests/testdata/archive_hash")
         with pytest.raises(ValueError):
             diff.detect(filepath, archive_path, DIFF_HASH)
+
+
+class TestCollect:
+    def test_collect1(self):
+        storage = abspath("./tests/testdata/full_storage")
+        archive = abspath("./tests/testdata/full_archive")
+
+        # create main DiffCache object and add doc1.txt record
+        expected_cache = diff.DiffCache()
+
+        expected_cache.add_diff(abspath(storage + "/doc1.txt"),
+                                diff.Diff("*", getmtime(
+                                    abspath(storage + "/doc1.txt")
+                                )), False)
+
+        # create DiffCache for subdir/subdir
+        subsub_initialdict = {abspath(storage + "/subdir/subdir/doc4.txt"):
+                              diff.Diff("*", getmtime(
+                                  abspath(storage + "/subdir/subdir/doc4.txt")
+                              ))}
+
+        subsub_dirflags = {abspath(storage + "/subdir/subdir/doc4.txt"): False}
+        subsub_diffcache = diff.DiffCache(initialdict=subsub_initialdict,
+                                          initialdirflags=subsub_dirflags)
+
+        # create DiffCache for subdir
+        sub_initialdict = {abspath(storage + "/subdir/doc2.txt"):
+                           diff.Diff("*", getmtime(
+                               abspath(storage + "/subdir/doc2.txt"))),
+                           abspath(storage + "/subdir/doc3.txt"):
+                           diff.Diff("*", getmtime(
+                               abspath(storage + "/subdir/doc3.txt"))),
+                           abspath(storage + "/subdir/subdir"):
+                           subsub_diffcache}
+        sub_initialdirflags = {abspath(storage + "/subdir/doc2.txt"): False,
+                               abspath(storage + "/subdir/doc3.txt"): False,
+                               abspath(storage + "/subdir/subdir"): True}
+        sub_diffcache = diff.DiffCache(initialdict=sub_initialdict,
+                                       initialdirflags=sub_initialdirflags)
+
+        # add sub_diffcache to expected_cache
+        expected_cache.add_diff(abspath(storage + "/subdir"),
+                                sub_diffcache, True)
+
+        diff_cache = diff.collect(storage, archive, DIFF_DATE)
+        assert diff_cache == expected_cache
