@@ -23,6 +23,30 @@ class DiffCache:
         else:
             self.dirflags = initialdirflags
 
+    def __eq__(self, other):
+        """
+        Overrides the == operator to check whether the dictioaries are equal.
+        This is mainly used to simplify testing.
+
+        :param other: The other DiffCache class
+        :type other: DiffCache
+        :return: True if dictionaries match - False if dictionaries don't match
+        :rtype: bool
+        """
+        checks = []
+
+        if self.diffdict == other.diffdict:
+            checks.append(True)
+        else:
+            checks.append(False)
+
+        if self.dirflags == other.dirflags:
+            checks.append(True)
+        else:
+            checks.append(False)
+
+        return checks == [True, True]
+
     def add_diff(self, location, diffobj, is_dir):
         """
         Add a diff reference to diffdict and dirflags.
@@ -116,6 +140,30 @@ class Diff:
         self.difftype = difftype_
         self.state = state
 
+    def __eq__(self, other):
+        """
+        Check if Diff object hold same values.
+        This is mostly used for testing purposes.
+
+        :param other: The other Diff object
+        :type other: Diff
+        :return: True if the objects hold the same values - False if they dont
+        :rtype: bool
+        """
+        checks = []
+
+        if self.difftype == other.difftype:
+            checks.append(True)
+        else:
+            checks.append(False)
+
+        if self.state == other.state:
+            checks.append(True)
+        else:
+            checks.append(False)
+
+        return checks == [True, True]
+
 
 def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None,
            subdir=""):
@@ -141,7 +189,10 @@ def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None,
     if diff_algorithm == DIFF_HASH and hash_algorithm is None:
         raise ValueError("No hash algorithm selected")
 
-    filename = subdir + os.path.basename(os.path.abspath(filepath))
+    if subdir == "":
+        filename = os.path.basename(filepath)
+    else:
+        filename = subdir + "/" + os.path.basename(os.path.abspath(filepath))
 
     arch_state = restore.get_arch_state(filename, archive_dir,
                                         diff_algorithm)
@@ -192,10 +243,13 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
         member_path = os.path.abspath(storage_dir + "/" + member)
         # if member is a directory run cullect() on said dir
         if os.path.isdir(member_path):
-            new_subdir = subdir + os.path.basename(member_path)
+            new_subdir = os.path.join(subdir, os.path.basename(member_path))
+            # os.path.join adds backslashes(\\) and these need to be replaced
+            # as the diff logs in the archives only use slashes(/)
+            new_subdir = new_subdir.replace("\\", "/")
 
             diff = collect(member_path, archive_dir, diff_algorithm,
-                           hash_algorithm, new_subdir),
+                           hash_algorithm, new_subdir)
             diff_cache.add_diff(member_path, diff, True)
         # if member is a file detect the differences and add them to diff_cache
         else:
