@@ -16,6 +16,7 @@ build = "*"
 sphinx = "*"
 pybacked = {editable = true, path = "."}
 sphinx-rtd-theme = "*"
+atomicwrites = "*"
 
 [requires]
 python_version = "3"
