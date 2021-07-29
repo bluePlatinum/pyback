@@ -3,7 +3,7 @@ import io
 import os
 import pytest
 from pybacked import HASH_SHA256
-from pybacked import DIFF_DATE, DIFF_HASH
+from pybacked import DIFF_CONT, DIFF_DATE, DIFF_HASH
 from pybacked import restore
 
 
@@ -139,3 +139,15 @@ def test_get_file_content():
     result = restore.get_file_content(filepath)
 
     assert result == expected_content
+
+
+def test_get_arch_state_content():
+    archpath = os.path.abspath("./tests/testdata/archive_cont")
+    filename = "test_sample1.txt"
+    # get expected
+    file = open(archpath + "/" + filename, "rb")
+    expected = file.read()
+    file.close()
+    # ----
+    result = restore.get_arch_state(filename, archpath, DIFF_CONT)
+    assert result == expected

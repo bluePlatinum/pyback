@@ -164,3 +164,5 @@ def get_arch_state(filename, archivedir, diff_algorithm):
             return float(diff_entry['diff'])
         elif diff_algorithm == pybacked.DIFF_HASH:
             return diff_entry['diff']
+        elif diff_algorithm == pybacked.DIFF_CONT:
+            return bytes.fromhex(diff_entry['diff'])
