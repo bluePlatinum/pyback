@@ -1,0 +1,2 @@
+This is a test sample to test for:
+Content DIFF !"§%&/()``*'_
