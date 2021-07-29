@@ -88,6 +88,8 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
         return get_edit_date(filepath)
     elif diff_algorithm == pybacked.DIFF_HASH:
         return get_file_hash(filepath, hash_algorithm)
+    elif diff_algorithm == pybacked.DIFF_CONT:
+        return get_file_content(filepath)
 
 
 def get_file_hash(filepath, algorithm):
@@ -121,6 +123,21 @@ def get_edit_date(filepath):
     return timestamp
 
 
+def get_file_content(filepath):
+    """
+    Get the file content in binary mode
+
+    :param filepath: The path to the file
+    :type filepath: str
+    :return: The content of the file
+    :rtype: bytes
+    """
+    file = open(filepath, "rb")
+    content = file.read()
+    file.close()
+    return content
+
+
 def get_arch_state(filename, archivedir, diff_algorithm):
     """
     Get the last (diff) state of the archived file version.
@@ -149,3 +166,5 @@ def get_arch_state(filename, archivedir, diff_algorithm):
             return float(diff_entry['diff'])
         elif diff_algorithm == pybacked.DIFF_HASH:
             return diff_entry['diff']
+        elif diff_algorithm == pybacked.DIFF_CONT:
+            return bytes.fromhex(diff_entry['diff'])

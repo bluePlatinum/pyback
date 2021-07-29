@@ -8,3 +8,4 @@ HASH_BLAKE_2S = 'blake2s'
 
 DIFF_DATE = 0
 DIFF_HASH = 1
+DIFF_CONT = 2
