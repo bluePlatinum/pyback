@@ -145,9 +145,6 @@ def test_get_arch_state_content():
     archpath = os.path.abspath("./tests/testdata/archive_cont")
     filename = "test_sample1.txt"
     # get expected
-    file = open(archpath + "/" + filename, "rb")
-    expected = file.read()
-    file.close()
-    # ----
+    expected = "asdf".encode()
     result = restore.get_arch_state(filename, archpath, DIFF_CONT)
     assert result == expected
