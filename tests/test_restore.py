@@ -126,3 +126,16 @@ def test_get_arch_state_hash():
     expected_hash = '59d9a6df06b9f610f7db8e036896ed03662d168f'
     result = restore.get_arch_state(filename, arch_path, DIFF_HASH)
     assert result == expected_hash
+
+
+def test_get_file_content():
+    filepath = os.path.abspath("./tests/testdata/test_sample1.txt")
+
+    # get expected content
+    file = open(filepath, "rb")
+    expected_content = file.read()
+    file.close()
+
+    result = restore.get_file_content(filepath)
+
+    assert result == expected_content
