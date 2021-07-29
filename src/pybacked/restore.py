@@ -88,6 +88,8 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
         return get_edit_date(filepath)
     elif diff_algorithm == pybacked.DIFF_HASH:
         return get_file_hash(filepath, hash_algorithm)
+    elif diff_algorithm == pybacked.DIFF_CONT:
+        return get_file_content(filepath)
 
 
 def get_file_hash(filepath, algorithm):

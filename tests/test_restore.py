@@ -148,3 +148,11 @@ def test_get_arch_state_content():
     expected = "asdf".encode()
     result = restore.get_arch_state(filename, archpath, DIFF_CONT)
     assert result == expected
+
+
+def test_get_current_state_content():
+    filepath = os.path.abspath(
+        "./tests/testdata/archive_cont/test_sample1.txt")
+    expected = restore.get_file_content(filepath)
+    result = restore.get_current_state(filepath, DIFF_CONT)
+    assert result == expected
