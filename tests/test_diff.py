@@ -244,8 +244,19 @@ def test_diffcache_iter():
         dirs.append(entry[0])
         diffs.append(entry[1])
         dirflags.append(entry[2])
+    # sort to unify testing for all Operating Systems
+    # Linux will list the directories first, before listing files
+    dirs.sort()
+    dirflags.sort()
+
+    # check if diffs is correct
+    if type(diffs[0]) == diff.Diff and type(diffs[1]) == diff.DiffCache:
+        dir_check = True
+    elif type(diffs[0]) == diff.DiffCache and type(diffs[1]) == diff.Diff:
+        dir_check = True
+    else:
+        dir_check = False
 
     assert dirs == exp_paths
-    assert type(diffs[0]) == diff.Diff
-    assert type(diffs[1]) == diff.DiffCache
+    assert dir_check
     assert dirflags == exp_dirflags
