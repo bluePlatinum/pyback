@@ -220,3 +220,32 @@ class TestCollect:
 
         diff_cache = diff.collect(storage, archive, DIFF_DATE)
         assert diff_cache == expected_cache
+
+
+def test_diffcache_iter():
+    # generate a diff cache
+    storagepath = abspath("./tests/testdata/full_storage")
+    archivepath = abspath("./tests/testdata/full_archive")
+    diffcache = diff.collect(storagepath, archivepath, DIFF_DATE)
+
+    # create expected
+    exp_path1 = abspath("./tests/testdata/full_storage/doc1.txt")
+    exp_path2 = abspath("./tests/testdata/full_storage/subdir")
+    exp_paths = [exp_path1, exp_path2]
+    exp_dirflags = [False, True]
+
+    # run iteration
+    results = []
+    dirs = []
+    diffs = []
+    dirflags = []
+    for entry in diffcache:
+        results.append(entry)
+        dirs.append(entry[0])
+        diffs.append(entry[1])
+        dirflags.append(entry[2])
+
+    assert dirs == exp_paths
+    assert type(diffs[0]) == diff.Diff
+    assert type(diffs[1]) == diff.DiffCache
+    assert dirflags == exp_dirflags
