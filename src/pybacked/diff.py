@@ -47,6 +47,41 @@ class DiffCache:
 
         return checks == [True, True]
 
+    def __iter__(self):
+        """
+        Used for Iteration. This method creates a list of all the file names,
+        which will then be used by __next__() to iterate over the dictionries.
+
+        :return: self
+        """
+        self.index = 0
+        self.pathlist = []
+        for filepath, diff in self.diffdict.items():
+            self.pathlist.append(filepath)
+        return self
+
+    def __next__(self):
+        """
+        Iterate over the DiffCache. This will iterate through the diffdict and
+        the dirflags and return a list as [filepath, diffentry, dirflag] for
+        each diffdict/dirflags entry.
+
+        :return: [filepath, diffentry, dirflag] for each filepath
+        :rtype: List
+        """
+        try:
+            current_path = self.pathlist[self.index]
+            diffentry = self.diffdict[current_path]
+            dirflag = self.dirflags[current_path]
+            self.index += 1
+            return [current_path, diffentry, dirflag]
+        except IndexError:
+            # clean up the variables created by __iter__()
+            del self.index
+            del self.pathlist
+
+            raise StopIteration
+
     def add_diff(self, location, diffobj, is_dir):
         """
         Add a diff reference to diffdict and dirflags.
