@@ -1,5 +1,8 @@
+import io
+import tempfile
 import pybacked.diff
 import pybacked.logging
+import zipfile
 
 
 class TestObject:
@@ -32,4 +35,24 @@ def test_create_log():
         'filename,modtype,diff\r\nfile1,+,1\r\nsub/file2,+,' \
         '2\r\nsub/file3,+,3\r\nsub/sub/file4,+,4\r\n'
     result = pybacked.logging.create_log(TestObject.diffcache)
+    assert result == expected
+
+
+def test_write_log():
+    expected = "filename,modtype,diff\nfile1,+,1\n" \
+               "sub/file2,+,2\nsub/file3,+,3\nsub/sub/file4,+,4\n"
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archivepath = tmpdir + "/archive.zip"
+        pybacked.logging.write_log(TestObject.diffcache, archivepath,
+                                   zipfile.ZIP_DEFLATED, 9)
+        # check if write was successfull
+        archive = zipfile.ZipFile(archivepath, mode='r')
+        diff_log = archive.open("diff-log.txt")
+        wrapper = io.TextIOWrapper(diff_log, newline=None)
+        result = wrapper.read()
+        wrapper.close()
+        diff_log.close()
+        archive.close()
+
     assert result == expected
