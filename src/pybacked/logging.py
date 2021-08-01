@@ -10,6 +10,8 @@ def create_log(diffcache):
 
     :param diffcache: The DiffCachhe object returned by diff.collect()
     :type diffcache: DiffCache
+    :return: The Content of the log.
+    :rtype: str
     """
     stream = io.StringIO()
     writer = csv.writer(stream)
