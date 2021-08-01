@@ -2,8 +2,7 @@ import pybacked.diff
 import pybacked.logging
 
 
-def test_serialize_diff():
-    # create diffcache to be serialized
+class TestObject:
     diff1 = pybacked.diff.Diff("+", 1)
     diff2 = pybacked.diff.Diff("+", 2)
     diff3 = pybacked.diff.Diff("+", 3)
@@ -20,9 +19,9 @@ def test_serialize_diff():
         initialdict={"file1": diff1, "sub": diffcache_sub},
         initialdirflags={"file1": False, "sub": True})
 
-    # create expected result
+
+def test_serialize_diff():
     expected = [["file1", "+", 1], ["sub/file2", "+", 2],
                 ["sub/file3", "+", 3], ["sub/sub/file4", "+", 4]]
-
-    result = pybacked.logging.serialize_diff(diffcache)
+    result = pybacked.logging.serialize_diff(TestObject.diffcache)
     assert result == expected
