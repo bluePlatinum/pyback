@@ -3,6 +3,29 @@ import os
 import zipfile
 
 
+def archive_write(archivepath, data, filename, compression, compressionlevel):
+    """
+    Create a file named filename in the archive and write data to it
+
+    :param archivepath: The path to the zip-archive
+    :type archivepath: str
+    :param data: The data to be written to the file
+    :type data: str
+    :param filename: The filename for the newly created file
+    :type filename: str
+    :param compression: The desired compression for the zip-archive
+    :type compression: int
+    :param compressionlevel: The desired compression level for the zip-archive
+    :type compressionlevel: int
+    :return: void
+    """
+    archive = zipfile.ZipFile(archivepath, mode='a',
+                              compression=compression,
+                              compresslevel=compressionlevel)
+    archive.writestr(filename, data)
+    archive.close()
+
+
 def create_archive(archivepath, filedict, compression, compressionlevel):
     """
     Write filedict to zip-archive. Will check wether file at filepath exists

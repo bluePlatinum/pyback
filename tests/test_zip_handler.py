@@ -6,6 +6,24 @@ import zipfile
 from pybacked import zip_handler
 
 
+def test_archive_write():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archivepath = tmpdir + "/archive.zip"
+        zip_handler.archive_write(archivepath, "Hello", "file1.txt",
+                                  compression=zipfile.ZIP_DEFLATED,
+                                  compressionlevel=9)
+        # check if data was written properly
+        archive = zipfile.ZipFile(archivepath, mode='r')
+        file = archive.open("file1.txt")
+        wrapper = io.TextIOWrapper(file, newline=None)
+        result = wrapper.read()
+        wrapper.close()
+        file.close()
+        archive.close()
+
+    assert result == "Hello"
+
+
 def test_create_archive():
     filedict = {osp.abspath("./tests/testdata/test_sample1.txt"):
                 "test_sample1.txt"}
