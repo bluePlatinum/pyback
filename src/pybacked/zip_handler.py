@@ -3,11 +3,10 @@ import os
 import zipfile
 
 
-def zip_write(archivepath, filedict, compression, compressionlevel):
+def create_archive(archivepath, filedict, compression, compressionlevel):
     """
     Write filedict to zip-archive. Will check wether file at filepath exists
-    before writing. If file exists will return False, else will return True
-    after complete write.
+    before writing. If file exists will raise a FileExistsError.
 
     :param archivepath: the path to the file
     :param filedict: dictionary containing the filepath, filename key-value
