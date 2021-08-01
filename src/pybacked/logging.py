@@ -1,6 +1,7 @@
 import csv
 import io
 import os.path
+import pybacked.zip_handler
 
 
 def create_log(diffcache):
@@ -50,3 +51,21 @@ def serialize_diff(diffcache, subdir=""):
             diffstate = element[1].state
             rows.append([path, modtype, diffstate])
     return rows
+
+
+def write_log(diffcache, archivepath, compression, compresslevel):
+    """
+    Writes the log created by create_log() directly to the diff-log.txt in
+    the given zip-archive.
+    :param diffcache: The DiffCache from which the log will be created
+    :type diffcache: DiffCache
+    :param archivepath: The path to the archive
+    :type archivepath: str
+    :param compression: The chosen compression algorithm
+    :type compression: int
+    :param compresslevel: The chosen compression level (0-9)
+    :type compresslevel: int
+    """
+    log = create_log(diffcache)
+    pybacked.zip_handler.archive_write(archivepath, log, "diff-log.txt",
+                                       compression, compresslevel)
