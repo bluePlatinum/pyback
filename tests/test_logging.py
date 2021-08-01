@@ -25,3 +25,11 @@ def test_serialize_diff():
                 ["sub/file3", "+", 3], ["sub/sub/file4", "+", 4]]
     result = pybacked.logging.serialize_diff(TestObject.diffcache)
     assert result == expected
+
+
+def test_create_log():
+    expected = \
+        'filename,modtype,diff\r\nfile1,+,1\r\nsub/file2,+,' \
+        '2\r\nsub/file3,+,3\r\nsub/sub/file4,+,4\r\n'
+    result = pybacked.logging.create_log(TestObject.diffcache)
+    assert result == expected

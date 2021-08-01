@@ -1,4 +1,26 @@
+import csv
+import io
 import os.path
+
+
+def create_log(diffcache):
+    """
+    Create a diff-log from a given diffcache. This function only returns the
+    content of the diff-log, it does not create or write the diff-file itself
+
+    :param diffcache: The DiffCachhe object returned by diff.collect()
+    :type diffcache: DiffCache
+    """
+    stream = io.StringIO()
+    writer = csv.writer(stream)
+    writer.writerow(['filename', 'modtype', 'diff'])
+    serialized = serialize_diff(diffcache)
+    for row in serialized:
+        writer.writerow(row)
+    stream.seek(0)
+    log = stream.read()
+    stream.close()
+    return log
 
 
 def serialize_diff(diffcache, subdir=""):
