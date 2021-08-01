@@ -34,7 +34,7 @@ def serialize_diff(diffcache, subdir=""):
     :param diffcache: The DiffCache object to be serialized
     :type diffcache: DiffCache
     :param subdir: The subdir seriaize_diff is currently working in. Mainly
-    used for recursion
+        used for recursion
     :type subdir: str
     :return: A List of csv-rows (3-element-Lists)
     :rtype: List
@@ -57,6 +57,7 @@ def write_log(diffcache, archivepath, compression, compresslevel):
     """
     Writes the log created by create_log() directly to the diff-log.txt in
     the given zip-archive.
+
     :param diffcache: The DiffCache from which the log will be created
     :type diffcache: DiffCache
     :param archivepath: The path to the archive
