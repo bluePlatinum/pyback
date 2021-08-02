@@ -52,7 +52,7 @@ def get_archive_list(archivedir):
     """
     Return a list of paths to all the backup archives.
 
-    :param archivedir:
+    :param archivedir: The directory in which archives are stored
     :return: a list of paths to all the backup archives
     :rtype: list
     """
@@ -94,13 +94,13 @@ def get_current_state(filepath, diff_algorithm, hash_algorithm=None):
 
 def get_file_hash(filepath, algorithm):
     """
-    Get hash of file.
+    Get hash of a file.
 
     :param filepath: the path to the file
     :type filepath: str
     :param algorithm: the desired hashing algorithm
     :type algorithm: str
-    :return: hex hash of the file
+    :return: Hash of the file in hex form.
     :rtype: str
     """
     file = io.open(filepath, "rb")
