@@ -7,10 +7,10 @@ class Configuration:
         UI element to help the User distinguish between multiple
         configurations.
     :type name: str
-    :param storage_dir: The directory on which to perform backups
-    :type storage_dir: str
-    :param archive_dir: The directory where for the backup-archive
-    :type archive_dir: str
+    :param storage: The directory on which to perform backups
+    :type storage: str
+    :param archive: The directory where for the backup-archive
+    :type archive: str
     :param diff_algorithm: The desired diff method. One of (DIFF_CONT,
         DIFF_DATE, DIFF_HASH)
     :type diff_algorithm: int
@@ -27,11 +27,11 @@ class Configuration:
         be found in the __init__.py file.
     :type hash_algorithm: str, optional
     """
-    def __init__(self, name, storage_dir, archive_dir, diff_algorithm,
+    def __init__(self, name, storage, archive, diff_algorithm,
                  compression_algorithm, compresslevel, hash_algorithm=None):
         self.name = name
-        self.storage_dir = storage_dir
-        self.archive_dir = archive_dir
+        self.storage = storage
+        self.archive = archive
         self.diff_algorithm = diff_algorithm
         self.compression_algorithm = compression_algorithm
         self.compresslevel = compresslevel
