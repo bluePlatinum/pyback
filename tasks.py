@@ -20,11 +20,14 @@ def clean(c, target):
     if target == "all":
         clean_build(c)
         clean_dist(c)
+        clean_docs(c)
         clean_tox(c)
     elif target == "build":
         clean_build(c)
     elif target == "dist":
         clean_dist(c)
+    elif target == "docs":
+        clean_docs(c)
     elif target == "tox":
         clean_tox(c)
 
@@ -43,6 +46,15 @@ def clean_dist(c):
         c.run("rm -r ./dist") if os.path.isdir("./dist") else False
     elif platform.system() == "Windows":
         c.run("rd /s /q .\\dist") if os.path.isdir(".\\dist") else False
+
+
+@task
+def clean_docs(c):
+    build_path = os.path.abspath("./docs/build")
+    if platform.system() == "Linux":
+        c.run(f"rm -r {build_path}") if os.path.isdir(build_path) else False
+    elif platform.system() == "Windows":
+        c.run(f"rd /s /q {build_path}") if os.path.isdir(build_path) else False
 
 
 @task
