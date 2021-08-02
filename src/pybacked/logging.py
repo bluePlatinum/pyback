@@ -7,11 +7,12 @@ import pybacked.zip_handler
 def create_log(diffcache):
     """
     Create a diff-log from a given diffcache. This function only returns the
-    content of the diff-log, it does not create or write the diff-file itself
+    content of the diff-log.txt, it does not create or write the
+    diff-file itself.
 
     :param diffcache: The DiffCachhe object returned by diff.collect()
     :type diffcache: DiffCache
-    :return: The Content of the log.
+    :return: The Content of the diff-log in string form.
     :rtype: str
     """
     stream = io.StringIO()

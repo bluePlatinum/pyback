@@ -5,7 +5,10 @@ from pybacked import restore
 
 class DiffCache:
     """
-    Used to hold file difference information.
+    A collection of diff classes, which hold information on file version
+    differences. For example DiffCache objects are used to collect Diff objects
+    for all files in a directory, in order to have them in one easily acessible
+    and versatile "Container"
 
     :param initialdict: Initial dictionary which will be copied into diffdict
     :type initialdict: dict, optional
@@ -220,6 +223,7 @@ def detect(filepath, archive_dir, diff_algorithm, hash_algorithm=None,
     :type subdir: str, optional
     :return: The diff class which corresponds to the file change or None if the
             file didn't change.
+    :rtype: Diff
     """
     if diff_algorithm == DIFF_HASH and hash_algorithm is None:
         raise ValueError("No hash algorithm selected")
@@ -259,14 +263,15 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
     :type storage_dir: str
     :param archive_dir: The archive directory
     :type archive_dir: str
-    :param diff_algorithm: The desired diff algorithm - one of DIFF_DATE or
-            DIFF_HASH
+    :param diff_algorithm: The desired diff algorithm - one of (DIFF_DATE,
+        DIFF_HASH, DIFF_CONT)
     :type diff_algorithm: int
     :param hash_algorithm: The desired hash algorithm.
     :type hash_algorithm: str
     :param subdir: The subdirectory prefix for the filename
     :type subdir: str, optional
     :return: The DiffCache object holding the diff information
+    :rtype: DiffCache
     """
     # check if hash algorithm is set
     if diff_algorithm == DIFF_HASH and hash_algorithm is None:
