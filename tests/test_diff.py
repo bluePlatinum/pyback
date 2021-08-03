@@ -1,4 +1,5 @@
 import time
+import platform
 import pytest
 from os.path import abspath as abspath
 from os.path import getmtime as getmtime
@@ -226,6 +227,9 @@ class TestCollect:
         Test if diff.collect removes None entries (entries for files, where no
         change has been detected)
         """
+        if platform.system() != "Windows":
+            pytest.skip("Wrong OS")
+
         storage = abspath("./tests/testdata/ext_test/storage")
         archive = abspath("./tests/testdata/ext_test/archive")
 
