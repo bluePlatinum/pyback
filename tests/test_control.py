@@ -23,3 +23,10 @@ def test_create_filedict():
     print("Expected: ", expected)
     print("Result: ", result)
     assert result == expected
+
+
+def test_get_archive_name():
+    archive_path = os.path.abspath("./tests/testdata/archive_date")
+    result = pybacked.control.get_new_archive_name(archive_path)
+    expected = "arch4.zip"
+    assert result == expected

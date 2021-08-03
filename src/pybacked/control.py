@@ -1,4 +1,5 @@
 import os.path
+import pybacked.restore
 
 
 def create_filedict(diffcache, subdir=""):
@@ -28,3 +29,20 @@ def create_filedict(diffcache, subdir=""):
         else:
             dictionary[element[0]] = subdir + os.path.basename(element[0])
     return dictionary
+
+
+def get_new_archive_name(archive_dir):
+    """
+    Checks for existing archives and returns the name of the next archive to
+    be created.
+
+    :param archive_dir: The directory in which the archives are located
+    :type archive_dir: str
+    :return: Returns the name, that the next archive should have
+    :rtype: str
+    """
+    archive_list = pybacked.restore.get_archive_list(archive_dir)
+    last_archive = os.path.basename(archive_list[0])
+    archive_number = int(last_archive.split('.')[0][-1]) + 1
+    archive_name = "arch" + str(archive_number) + ".zip"
+    return archive_name
