@@ -1,5 +1,34 @@
 import os.path
+import pybacked.diff
+import pybacked.logging
 import pybacked.restore
+import pybacked.zip_handler
+
+
+def backup(config):
+    """
+    Perform a backup with the given configuration
+
+    :param config: The configuration for the backup. All the needed data
+        should be stored inside a Configuration class object.
+    :type config: Configuration
+    """
+    diffcache = pybacked.diff.collect(config.storage, config.archive,
+                                      config.diff_algorithm,
+                                      config.hash_algorithm, )
+    file_dict = create_filedict(diffcache)
+    archname = get_new_archive_name(config.archive)
+    arch_full_path = os.path.abspath(config.archive + "/" + archname)
+
+    # write files to archive
+    pybacked.zip_handler.create_archive(arch_full_path, file_dict,
+                                        config.compression_algorithm,
+                                        config.compresslevel)
+
+    # write log to archive
+    pybacked.logging.write_log(diffcache, arch_full_path,
+                               config.compression_algorithm,
+                               config.compresslevel)
 
 
 def create_filedict(diffcache, subdir=""):
