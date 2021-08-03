@@ -221,6 +221,22 @@ class TestCollect:
         diff_cache = diff.collect(storage, archive, DIFF_DATE)
         assert diff_cache == expected_cache
 
+    def test_collect_none(self):
+        """
+        Test if diff.collect removes None entries (entries for files, where no
+        change has been detected)
+        """
+        storage = abspath("./tests/testdata/ext_test/storage")
+        archive = abspath("./tests/testdata/ext_test/archive")
+
+        diffcache = diff.collect(storage, archive, DIFF_HASH, HASH_SHA256)
+
+        # check if None entries (doc1.txt, doc3.txt) were successully removed
+        subdir = abspath("./tests/testdata/ext_test/storage/subdir")
+
+        assert len(diffcache.diffdict) == 1
+        assert len(diffcache.diffdict[subdir].diffdict) == 2
+
 
 def test_diffcache_iter():
     # generate a diff cache

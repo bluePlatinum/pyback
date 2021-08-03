@@ -295,5 +295,6 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
         else:
             diff = detect(member_path, archive_dir, diff_algorithm,
                           hash_algorithm, subdir)
-            diff_cache.add_diff(member_path, diff, False)
+            if diff is not None:
+                diff_cache.add_diff(member_path, diff, False)
     return diff_cache
