@@ -1,9 +1,11 @@
 import os.path
+import platform
 import pybacked
 import pybacked.backup
 import pybacked.config
 import pybacked.diff
 import pybacked.logging
+import pytest
 import shutil
 import tempfile
 import zipfile
@@ -37,80 +39,161 @@ def test_get_archive_name():
     assert result == expected
 
 
-def test_backup():
-    with tempfile.TemporaryDirectory() as tmpdir:
-        storage = os.path.abspath(tmpdir + "/storage")
-        archive = os.path.abspath(tmpdir + "/archive")
-        # os.mkdir(storage)
-        # os.mkdir(archive)
-        full_storage = os.path.abspath("./tests/testdata/full_storage")
-        full_archive = os.path.abspath("./tests/testdata/full_archive")
+class TestBackup:
+    def test_backup(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            storage = os.path.abspath(tmpdir + "/storage")
+            archive = os.path.abspath(tmpdir + "/archive")
+            # os.mkdir(storage)
+            # os.mkdir(archive)
+            full_storage = os.path.abspath("./tests/testdata/full_storage")
+            full_archive = os.path.abspath("./tests/testdata/full_archive")
 
-        # copy contents of full_storage to tmpdir
-        shutil.copytree(full_storage, os.path.abspath(storage))
-        shutil.copytree(full_archive, os.path.abspath(archive))
+            # copy contents of full_storage to tmpdir
+            shutil.copytree(full_storage, os.path.abspath(storage))
+            shutil.copytree(full_archive, os.path.abspath(archive))
 
-        # create configuration object
-        config = pybacked.config.Configuration("test1", storage, archive,
-                                               pybacked.DIFF_DATE,
-                                               zipfile.ZIP_DEFLATED, 9)
+            # create configuration object
+            config = pybacked.config.Configuration("test1", storage, archive,
+                                                   pybacked.DIFF_DATE,
+                                                   zipfile.ZIP_DEFLATED, 9)
 
-        # create expected variables
-        expected_diffcache = pybacked.diff.collect(storage, archive,
-                                                   pybacked.DIFF_DATE)
-        expected_log = pybacked.logging.create_log(expected_diffcache)
+            # create expected variables
+            expected_diffcache = pybacked.diff.collect(storage, archive,
+                                                       pybacked.DIFF_DATE)
+            expected_log = pybacked.logging.create_log(expected_diffcache)
 
-        # perform a backup
-        pybacked.backup.backup(config)
+            # perform a backup
+            pybacked.backup.backup(config)
 
-        # test wether the files were backed up successfully (multiple stages)
-        new_archive = os.path.abspath(archive + "/arch2.zip")
+            # test wether the files were backed up
+            # successfully (multiple stages)
+            new_archive = os.path.abspath(archive + "/arch2.zip")
 
-        # STAGE 1: was the new archive created?
-        assert os.path.isfile(new_archive)
+            # STAGE 1: was the new archive created?
+            assert os.path.isfile(new_archive)
 
-        # STAGE 2: check if files are identical to the files in storage
-        doc1_file = open(os.path.abspath(tmpdir + "/storage/doc1.txt"), 'rb')
-        doc2_file = open(os.path.abspath(
-            tmpdir + "/storage/subdir/doc2.txt"), 'rb')
-        doc3_file = open(os.path.abspath(
-            tmpdir + "/storage/subdir/doc3.txt"), 'rb')
-        doc4_file = open(os.path.abspath(
-            tmpdir + "/storage/subdir/subdir/doc4.txt"), 'rb')
-        doc1 = doc1_file.read()
-        doc2 = doc2_file.read()
-        doc3 = doc3_file.read()
-        doc4 = doc4_file.read()
-        doc1_file.close()
-        doc2_file.close()
-        doc3_file.close()
-        doc4_file.close()
+            # STAGE 2: check if files are identical to the files in storage
+            doc1_file = open(os.path.abspath(
+                tmpdir + "/storage/doc1.txt"), 'rb')
+            doc2_file = open(os.path.abspath(
+                tmpdir + "/storage/subdir/doc2.txt"), 'rb')
+            doc3_file = open(os.path.abspath(
+                tmpdir + "/storage/subdir/doc3.txt"), 'rb')
+            doc4_file = open(os.path.abspath(
+                tmpdir + "/storage/subdir/subdir/doc4.txt"), 'rb')
+            doc1 = doc1_file.read()
+            doc2 = doc2_file.read()
+            doc3 = doc3_file.read()
+            doc4 = doc4_file.read()
+            doc1_file.close()
+            doc2_file.close()
+            doc3_file.close()
+            doc4_file.close()
 
-        arch = zipfile.ZipFile(new_archive, mode='r')
-        doc1_arch_file = arch.open("doc1.txt", 'r')
-        doc2_arch_file = arch.open("subdir/doc2.txt", 'r')
-        doc3_arch_file = arch.open("subdir/doc3.txt", 'r')
-        doc4_arch_file = arch.open("subdir/subdir/doc4.txt", 'r')
-        doc1_arch = doc1_arch_file.read()
-        doc2_arch = doc2_arch_file.read()
-        doc3_arch = doc3_arch_file.read()
-        doc4_arch = doc4_arch_file.read()
-        doc1_arch_file.close()
-        doc2_arch_file.close()
-        doc3_arch_file.close()
-        doc4_arch_file.close()
-        arch.close()
+            arch = zipfile.ZipFile(new_archive, mode='r')
+            doc1_arch_file = arch.open("doc1.txt", 'r')
+            doc2_arch_file = arch.open("subdir/doc2.txt", 'r')
+            doc3_arch_file = arch.open("subdir/doc3.txt", 'r')
+            doc4_arch_file = arch.open("subdir/subdir/doc4.txt", 'r')
+            doc1_arch = doc1_arch_file.read()
+            doc2_arch = doc2_arch_file.read()
+            doc3_arch = doc3_arch_file.read()
+            doc4_arch = doc4_arch_file.read()
+            doc1_arch_file.close()
+            doc2_arch_file.close()
+            doc3_arch_file.close()
+            doc4_arch_file.close()
+            arch.close()
 
-        assert doc1 == doc1_arch
-        assert doc2 == doc2_arch
-        assert doc3 == doc3_arch
-        assert doc4 == doc4_arch
+            assert doc1 == doc1_arch
+            assert doc2 == doc2_arch
+            assert doc3 == doc3_arch
+            assert doc4 == doc4_arch
 
-        # STAGE 3: diff log
-        arch = zipfile.ZipFile(new_archive, mode='r')
-        print(arch.namelist())
-        diff_log_file = arch.open("diff-log.txt", 'r')
-        diff_log = diff_log_file.read()
-        diff_log_file.close()
-        arch.close()
-        assert diff_log == expected_log.encode()
+            # STAGE 3: diff log
+            arch = zipfile.ZipFile(new_archive, mode='r')
+            diff_log_file = arch.open("diff-log.txt", 'r')
+            diff_log = diff_log_file.read()
+            diff_log_file.close()
+            arch.close()
+            assert diff_log == expected_log.encode()
+
+    def test_backup_ext_test(self):
+        """
+        Runs the same testing methodology as test_backup, except for it runs
+        on the ext_test data
+        """
+        # currently the testing DIFF_HASH still doesn't work on windows
+        if platform.system() != "Windows":
+            pytest.skip("Wrong OS!")
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            storage = os.path.abspath(tmpdir + "/storage")
+            archive = os.path.abspath(tmpdir + "/archive")
+            storage_copy = os.path.abspath("./tests/testdata/ext_test/storage")
+            archive_copy = os.path.abspath("./tests/testdata/ext_test/archive")
+
+            # copy the model data to the tmpdir
+            shutil.copytree(storage_copy, storage)
+            shutil.copytree(archive_copy, archive)
+
+            # create configuration object
+            config = pybacked.config.Configuration("test2", storage, archive,
+                                                   pybacked.DIFF_HASH,
+                                                   zipfile.ZIP_DEFLATED, 9,
+                                                   pybacked.HASH_SHA256)
+
+            # create expeced variables
+            expected_diffcache = pybacked.diff.collect(config.storage,
+                                                       config.archive,
+                                                       config.diff_algorithm,
+                                                       config.hash_algorithm)
+            expected_log = pybacked.logging.create_log(expected_diffcache)
+            expected_namelist = ["subdir/doc2.txt", "subdir/subdir/doc4.txt",
+                                 "diff-log.txt"]
+
+            # perform a backup
+            pybacked.backup.backup(config)
+
+            # test if archive was created successfully
+            new_archive = os.path.abspath(archive + "/arch3.zip")
+
+            # STAGE 1: was the new archive created?
+            assert os.path.isfile(new_archive)
+
+            # STAGE 2: check if archive contains the correct files
+            arch = zipfile.ZipFile(new_archive, mode='r')
+            namelist = arch.namelist()
+            arch.close()
+            assert namelist == expected_namelist
+
+            # STAGE 3: check if files are identical to files in storage
+            arch = zipfile.ZipFile(new_archive, mode='r')
+            doc2_file = open(os.path.abspath(
+                tmpdir + "/storage/subdir/doc2.txt"), 'rb')
+            doc4_file = open(os.path.abspath(
+                tmpdir + "/storage/subdir/subdir/doc4.txt"), 'rb')
+            doc2 = doc2_file.read()
+            doc4 = doc4_file.read()
+            doc2_file.close()
+            doc4_file.close()
+
+            doc2_arch_file = arch.open("subdir/doc2.txt", 'r')
+            doc4_arch_file = arch.open("subdir/subdir/doc4.txt", 'r')
+            doc2_arch = doc2_arch_file.read()
+            doc4_arch = doc4_arch_file.read()
+            doc2_arch_file.close()
+            doc4_arch_file.close()
+            arch.close()
+
+            assert doc2 == doc2_arch
+            assert doc4 == doc4_arch
+
+            # STAGE 4: diff log
+            arch = zipfile.ZipFile(new_archive, mode='r')
+            diff_log_file = arch.open("diff-log.txt", 'r')
+            diff_log = diff_log_file.read()
+            diff_log_file.close()
+            arch.close()
+            assert diff_log == expected_log.encode()
