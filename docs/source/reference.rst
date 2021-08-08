@@ -13,6 +13,7 @@ Reference to all the Modules/Classes/Functions etc.
    :maxdepth: 1
    :caption: Modules
 
+   modules/backup
    modules/config
    modules/diff
    modules/logging
