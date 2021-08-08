@@ -113,7 +113,7 @@ class TestBackup:
 
             # STAGE 3: diff log
             arch = zipfile.ZipFile(new_archive, mode='r')
-            diff_log_file = arch.open("diff-log.txt", 'r')
+            diff_log_file = arch.open("diff-log.csv", 'r')
             diff_log = diff_log_file.read()
             diff_log_file.close()
             arch.close()
@@ -151,7 +151,7 @@ class TestBackup:
                                                        config.hash_algorithm)
             expected_log = pybacked.logging.create_log(expected_diffcache)
             expected_namelist = ["subdir/doc2.txt", "subdir/subdir/doc4.txt",
-                                 "diff-log.txt"]
+                                 "diff-log.csv"]
 
             # perform a backup
             pybacked.backup.backup(config)
@@ -192,7 +192,7 @@ class TestBackup:
 
             # STAGE 4: diff log
             arch = zipfile.ZipFile(new_archive, mode='r')
-            diff_log_file = arch.open("diff-log.txt", 'r')
+            diff_log_file = arch.open("diff-log.csv", 'r')
             diff_log = diff_log_file.read()
             diff_log_file.close()
             arch.close()
