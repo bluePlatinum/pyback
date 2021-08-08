@@ -48,7 +48,7 @@ def test_write_log():
                                    zipfile.ZIP_DEFLATED, 9)
         # check if write was successfull
         archive = zipfile.ZipFile(archivepath, mode='r')
-        diff_log = archive.open("diff-log.txt")
+        diff_log = archive.open("diff-log.csv")
         wrapper = io.TextIOWrapper(diff_log, newline=None)
         result = wrapper.read()
         wrapper.close()
