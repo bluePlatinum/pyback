@@ -1,9 +1,11 @@
 import os.path
+import platform
 import pybacked
 import pybacked.backup
 import pybacked.config
 import pybacked.diff
 import pybacked.logging
+import pytest
 import shutil
 import tempfile
 import zipfile
@@ -122,6 +124,10 @@ class TestBackup:
         Runs the same testing methodology as test_backup, except for it runs
         on the ext_test data
         """
+        # currently the testing DIFF_HASH still doesn't work on windows
+        if platform.system() != "Windows":
+            pytest.skip("Wrong OS!")
+
         with tempfile.TemporaryDirectory() as tmpdir:
             storage = os.path.abspath(tmpdir + "/storage")
             archive = os.path.abspath(tmpdir + "/archive")
