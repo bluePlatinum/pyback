@@ -5,7 +5,6 @@ import pybacked.backup
 import pybacked.config
 import pybacked.diff
 import pybacked.logging
-import pytest
 import shutil
 import tempfile
 import zipfile
@@ -124,15 +123,16 @@ class TestBackup:
         Runs the same testing methodology as test_backup, except for it runs
         on the ext_test data
         """
-        # currently the testing DIFF_HASH still doesn't work on windows
-        if platform.system() != "Windows":
-            pytest.skip("Wrong OS!")
-
         with tempfile.TemporaryDirectory() as tmpdir:
             storage = os.path.abspath(tmpdir + "/storage")
             archive = os.path.abspath(tmpdir + "/archive")
             storage_copy = os.path.abspath("./tests/testdata/ext_test/storage")
-            archive_copy = os.path.abspath("./tests/testdata/ext_test/archive")
+            if platform.system() != "Windows":
+                archive_copy = os.path.abspath(
+                    "./tests/testdata/ext_test/archive_linux")
+            else:
+                archive_copy = os.path.abspath(
+                    "./tests/testdata/ext_test/archive")
 
             # copy the model data to the tmpdir
             shutil.copytree(storage_copy, storage)
