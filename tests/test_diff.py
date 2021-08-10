@@ -227,11 +227,12 @@ class TestCollect:
         Test if diff.collect removes None entries (entries for files, where no
         change has been detected)
         """
-        if platform.system() != "Windows":
-            pytest.skip("Wrong OS")
 
         storage = abspath("./tests/testdata/ext_test/storage")
-        archive = abspath("./tests/testdata/ext_test/archive")
+        if platform.system() != "Windows":
+            archive = abspath("./tests/testdata/ext_test/archive_linux")
+        else:
+            archive = abspath("./tests/testdata/ext_test/archive")
 
         diffcache = diff.collect(storage, archive, DIFF_HASH, HASH_SHA256)
 
