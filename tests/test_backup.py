@@ -152,6 +152,7 @@ class TestBackup:
             expected_log = pybacked.logging.create_log(expected_diffcache)
             expected_namelist = ["subdir/doc2.txt", "subdir/subdir/doc4.txt",
                                  "diff-log.csv"]
+            expected_namelist.sort()
 
             # perform a backup
             pybacked.backup.backup(config)
@@ -165,6 +166,7 @@ class TestBackup:
             # STAGE 2: check if archive contains the correct files
             arch = zipfile.ZipFile(new_archive, mode='r')
             namelist = arch.namelist()
+            namelist.sort()
             arch.close()
             assert namelist == expected_namelist
 
