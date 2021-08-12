@@ -33,7 +33,7 @@ def test_create_archive():
                                    compressionlevel=9)
 
         probe_archive = zipfile.ZipFile(tmpdir + "/probe_archive.zip")
-        probe_data = probe_archive.read("test_sample1.txt")
+        probe_data = probe_archive.read("data/test_sample1.txt")
         probe_archive.close()
 
         control_file = io.open("./tests/testdata/test_sample1.txt", "rb")

@@ -28,8 +28,9 @@ def archive_write(archivepath, data, filename, compression, compressionlevel):
 
 def create_archive(archivepath, filedict, compression, compressionlevel):
     """
-    Write filedict to zip-archive. Will check wether archive at archivepath
-    exists before writing. If file exists will raise a FileExistsError.
+    Write filedict to zip-archive data subdirectory. Will check wether archive
+    at archivepath exists before writing. If file exists will raise a
+    FileExistsError.
 
     :param archivepath: the path to the file
     :param filedict: dictionary containing the filepath, filename key-value
@@ -45,7 +46,7 @@ def create_archive(archivepath, filedict, compression, compressionlevel):
                                   compression=compression,
                                   compresslevel=compressionlevel)
         for filepath, filename in filedict.items():
-            archive.write(filepath, arcname=filename)
+            archive.write(filepath, arcname="data/" + filename)
     archive.close()
 
 

@@ -91,10 +91,10 @@ class TestBackup:
             doc4_file.close()
 
             arch = zipfile.ZipFile(new_archive, mode='r')
-            doc1_arch_file = arch.open("doc1.txt", 'r')
-            doc2_arch_file = arch.open("subdir/doc2.txt", 'r')
-            doc3_arch_file = arch.open("subdir/doc3.txt", 'r')
-            doc4_arch_file = arch.open("subdir/subdir/doc4.txt", 'r')
+            doc1_arch_file = arch.open("data/doc1.txt", 'r')
+            doc2_arch_file = arch.open("data/subdir/doc2.txt", 'r')
+            doc3_arch_file = arch.open("data/subdir/doc3.txt", 'r')
+            doc4_arch_file = arch.open("data/subdir/subdir/doc4.txt", 'r')
             doc1_arch = doc1_arch_file.read()
             doc2_arch = doc2_arch_file.read()
             doc3_arch = doc3_arch_file.read()
@@ -150,8 +150,9 @@ class TestBackup:
                                                        config.diff_algorithm,
                                                        config.hash_algorithm)
             expected_log = pybacked.logging.create_log(expected_diffcache)
-            expected_namelist = ["subdir/doc2.txt", "subdir/subdir/doc4.txt",
-                                 "diff-log.csv", "metadata.json"]
+            expected_namelist = ["data/subdir/doc2.txt",
+                                 "data/subdir/subdir/doc4.txt", "diff-log.csv",
+                                 "metadata.json"]
             expected_namelist.sort()
 
             # perform a backup
@@ -181,8 +182,8 @@ class TestBackup:
             doc2_file.close()
             doc4_file.close()
 
-            doc2_arch_file = arch.open("subdir/doc2.txt", 'r')
-            doc4_arch_file = arch.open("subdir/subdir/doc4.txt", 'r')
+            doc2_arch_file = arch.open("data/subdir/doc2.txt", 'r')
+            doc4_arch_file = arch.open("data/subdir/subdir/doc4.txt", 'r')
             doc2_arch = doc2_arch_file.read()
             doc4_arch = doc4_arch_file.read()
             doc2_arch_file.close()
