@@ -86,3 +86,23 @@ def write_log(diffcache, archivepath, compression, compresslevel):
     log = create_log(diffcache)
     pybacked.zip_handler.archive_write(archivepath, log, "diff-log.csv",
                                        compression, compresslevel)
+
+
+def write_metadata(timestamp, archpath, compression, compresslevel):
+    """
+    Writes the metadata created by create_metadata_string to a metadata.json
+    file in the archive.
+
+    :prarm archpath: The path to the archive
+    :type archpath: str
+    :param timestamp: The unix timestamp at the creation of the archive
+    :type timestamp: float
+    :param compression: The chosen compression algorithm
+    :type compression: int
+    :param compresslevel: The chosen compression level (0-9)
+    :type compresslevel: int
+    :return: Doesn't return anything
+    """
+    metadata = create_metadata_string(timestamp)
+    pybacked.zip_handler.archive_write(archpath, metadata, "metadata.json",
+                                       compression, compresslevel)

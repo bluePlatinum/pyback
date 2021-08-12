@@ -1,8 +1,10 @@
 import io
-import tempfile
-import time
+import os.path
 import pybacked.diff
 import pybacked.logging
+import shutil
+import tempfile
+import time
 import zipfile
 
 
@@ -64,3 +66,36 @@ def test_create_metadata_string():
     expected = "{" + f'"timestamp": {timestamp}' + "}"
     result = pybacked.logging.create_metadata_string(timestamp)
     assert result == expected
+
+
+def test_write_metadata():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        timestamp = time.time()
+
+        # copy the archive from full archive to the tmpdir
+        archive_template = os.path.abspath(
+            "./tests/testdata/full_archive/arch1.zip")
+        arch_path = os.path.abspath(tmpdir + "/arch1.zip")
+        shutil.copy(archive_template, arch_path)
+
+        # create expected variables
+        expected_json = "{" + f'"timestamp": {timestamp}' + "}"
+
+        # write metadata to archive
+        pybacked.logging.write_metadata(timestamp, arch_path,
+                                        zipfile.ZIP_DEFLATED, 9)
+
+        # Check if files were written successfully (multiple stages)
+        # STAGE 1: Does the archive contain a file called metadata.json
+        archive = zipfile.ZipFile(arch_path, mode='r')
+        namelist = archive.namelist()
+        archive.close()
+        assert namelist.count("metadata.json") == 1
+
+        # STAGE 2: Does metadata.json contain the correct information
+        archive = zipfile.ZipFile(arch_path, mode='r')
+        metadata_file = archive.open("metadata.json", mode='r')
+        metadata = metadata_file.read()
+        metadata_file.close()
+        archive.close()
+        assert metadata == expected_json.encode()
