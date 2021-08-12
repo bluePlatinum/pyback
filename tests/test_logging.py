@@ -1,5 +1,6 @@
 import io
 import tempfile
+import time
 import pybacked.diff
 import pybacked.logging
 import zipfile
@@ -55,4 +56,11 @@ def test_write_log():
         diff_log.close()
         archive.close()
 
+    assert result == expected
+
+
+def test_create_metadata_string():
+    timestamp = time.time()
+    expected = "{" + f'"timestamp": {timestamp}' + "}"
+    result = pybacked.logging.create_metadata_string(timestamp)
     assert result == expected

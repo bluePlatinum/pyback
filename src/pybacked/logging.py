@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 import os.path
 import pybacked.zip_handler
 
@@ -25,6 +26,20 @@ def create_log(diffcache):
     log = stream.read()
     stream.close()
     return log
+
+
+def create_metadata_string(timestamp):
+    """
+    Create a json string from the given parameters.
+
+    :param timestamp: The timestamp at the creation of the archive
+    :type timestamp: float
+    :return: Returns the string containing the json-style metadata
+    :rtype: str
+    """
+    metadata = {"timestamp": timestamp}
+    json_string = json.dumps(metadata)
+    return json_string
 
 
 def serialize_diff(diffcache, subdir=""):
