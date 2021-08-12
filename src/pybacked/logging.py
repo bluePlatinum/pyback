@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 import os.path
 import pybacked.zip_handler
 
@@ -25,6 +26,20 @@ def create_log(diffcache):
     log = stream.read()
     stream.close()
     return log
+
+
+def create_metadata_string(timestamp):
+    """
+    Create a json string from the given parameters.
+
+    :param timestamp: The timestamp at the creation of the archive
+    :type timestamp: float
+    :return: Returns the string containing the json-style metadata
+    :rtype: str
+    """
+    metadata = {"timestamp": timestamp}
+    json_string = json.dumps(metadata)
+    return json_string
 
 
 def serialize_diff(diffcache, subdir=""):
@@ -70,4 +85,24 @@ def write_log(diffcache, archivepath, compression, compresslevel):
     """
     log = create_log(diffcache)
     pybacked.zip_handler.archive_write(archivepath, log, "diff-log.csv",
+                                       compression, compresslevel)
+
+
+def write_metadata(timestamp, archpath, compression, compresslevel):
+    """
+    Writes the metadata created by create_metadata_string to a metadata.json
+    file in the archive.
+
+    :prarm archpath: The path to the archive
+    :type archpath: str
+    :param timestamp: The unix timestamp at the creation of the archive
+    :type timestamp: float
+    :param compression: The chosen compression algorithm
+    :type compression: int
+    :param compresslevel: The chosen compression level (0-9)
+    :type compresslevel: int
+    :return: Doesn't return anything
+    """
+    metadata = create_metadata_string(timestamp)
+    pybacked.zip_handler.archive_write(archpath, metadata, "metadata.json",
                                        compression, compresslevel)

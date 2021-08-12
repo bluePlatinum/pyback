@@ -151,7 +151,7 @@ class TestBackup:
                                                        config.hash_algorithm)
             expected_log = pybacked.logging.create_log(expected_diffcache)
             expected_namelist = ["subdir/doc2.txt", "subdir/subdir/doc4.txt",
-                                 "diff-log.csv"]
+                                 "diff-log.csv", "metadata.json"]
             expected_namelist.sort()
 
             # perform a backup

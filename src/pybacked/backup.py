@@ -3,6 +3,7 @@ import pybacked.diff
 import pybacked.logging
 import pybacked.restore
 import pybacked.zip_handler
+import time
 
 
 def backup(config):
@@ -29,6 +30,12 @@ def backup(config):
     pybacked.logging.write_log(diffcache, arch_full_path,
                                config.compression_algorithm,
                                config.compresslevel)
+
+    # write metadata.json
+    timestamp = time.time()
+    pybacked.logging.write_metadata(timestamp, arch_full_path,
+                                    config.compression_algorithm,
+                                    config.compresslevel)
 
 
 def create_filedict(diffcache, subdir=""):
