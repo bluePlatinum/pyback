@@ -99,3 +99,20 @@ def test_write_metadata():
         metadata_file.close()
         archive.close()
         assert metadata == expected_json.encode()
+
+
+class TestMetadataContainer:
+    def test_constructor_empty(self):
+        instance = pybacked.logging.MetadataContainer()
+        assert instance.timestamp is None
+
+    def test_constructor_full(self):
+        timestamp = time.time()
+        instance = pybacked.logging.MetadataContainer(timestamp=timestamp)
+        assert instance.timestamp == timestamp
+
+    def test_equal(self):
+        timestamp = time.time()
+        instance1 = pybacked.logging.MetadataContainer(timestamp=timestamp)
+        instance2 = pybacked.logging.MetadataContainer(timestamp=timestamp)
+        assert instance1 == instance2

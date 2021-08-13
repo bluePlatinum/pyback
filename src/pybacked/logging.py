@@ -5,6 +5,34 @@ import os.path
 import pybacked.zip_handler
 
 
+class MetadataContainer:
+    """
+    A container class to hold metadata of a given archive.
+
+    :param timestamp: The timestamp at the creation of the archive
+    :type timestamp: float
+    """
+    def __init__(self, timestamp=None):
+        self.timestamp = timestamp
+
+    def __eq__(self, other):
+        """
+        Overrides the == operator. This will check wether the values of the
+        instance variables are identical.
+
+        :param other: The other MetadataContainer class
+        :type other: MetadataContainer
+        :return: True if all values match and False if a single (or more)
+            values are non-identical.
+        :rtype: bool
+        """
+        if self.timestamp == other.timestamp:
+            pass
+        else:
+            return False
+        return True
+
+
 def create_log(diffcache):
     """
     Create a diff-log from a given diffcache. This function only returns the
