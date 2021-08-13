@@ -5,6 +5,34 @@ import os.path
 import pybacked.zip_handler
 
 
+class MetadataContainer:
+    """
+    A container class to hold metadata of a given archive.
+
+    :param timestamp: The timestamp at the creation of the archive
+    :type timestamp: float
+    """
+    def __init__(self, timestamp=None):
+        self.timestamp = timestamp
+
+    def __eq__(self, other):
+        """
+        Overrides the == operator. This will check wether the values of the
+        instance variables are identical.
+
+        :param other: The other MetadataContainer class
+        :type other: MetadataContainer
+        :return: True if all values match and False if a single (or more)
+            values are non-identical.
+        :rtype: bool
+        """
+        if self.timestamp == other.timestamp:
+            pass
+        else:
+            return False
+        return True
+
+
 def create_log(diffcache):
     """
     Create a diff-log from a given diffcache. This function only returns the
@@ -28,17 +56,17 @@ def create_log(diffcache):
     return log
 
 
-def create_metadata_string(timestamp):
+def create_metadata_string(metadata):
     """
-    Create a json string from the given parameters.
+    Create a serialized json string from the given metadata.
 
-    :param timestamp: The timestamp at the creation of the archive
-    :type timestamp: float
+    :param metadata: The metadata which should be serialized.
+    :type metadata: MetadataContainer
     :return: Returns the string containing the json-style metadata
     :rtype: str
     """
-    metadata = {"timestamp": timestamp}
-    json_string = json.dumps(metadata)
+    top_level_object = {"timestamp": metadata.timestamp}
+    json_string = json.dumps(top_level_object)
     return json_string
 
 
@@ -88,21 +116,21 @@ def write_log(diffcache, archivepath, compression, compresslevel):
                                        compression, compresslevel)
 
 
-def write_metadata(timestamp, archpath, compression, compresslevel):
+def write_metadata(metadata, archpath, compression, compresslevel):
     """
     Writes the metadata created by create_metadata_string to a metadata.json
     file in the archive.
 
     :prarm archpath: The path to the archive
     :type archpath: str
-    :param timestamp: The unix timestamp at the creation of the archive
-    :type timestamp: float
+    :param metadata: The metadata to be written to the file.
+    :type metadata: MetadataContainer
     :param compression: The chosen compression algorithm
     :type compression: int
     :param compresslevel: The chosen compression level (0-9)
     :type compresslevel: int
     :return: Doesn't return anything
     """
-    metadata = create_metadata_string(timestamp)
-    pybacked.zip_handler.archive_write(archpath, metadata, "metadata.json",
+    serialized = create_metadata_string(metadata)
+    pybacked.zip_handler.archive_write(archpath, serialized, "metadata.json",
                                        compression, compresslevel)

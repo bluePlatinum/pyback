@@ -63,14 +63,16 @@ def test_write_log():
 
 def test_create_metadata_string():
     timestamp = time.time()
+    metadata = pybacked.logging.MetadataContainer(timestamp=timestamp)
     expected = "{" + f'"timestamp": {timestamp}' + "}"
-    result = pybacked.logging.create_metadata_string(timestamp)
+    result = pybacked.logging.create_metadata_string(metadata)
     assert result == expected
 
 
 def test_write_metadata():
     with tempfile.TemporaryDirectory() as tmpdir:
         timestamp = time.time()
+        metadata_container = pybacked.logging.MetadataContainer(timestamp)
 
         # copy the archive from full archive to the tmpdir
         archive_template = os.path.abspath(
@@ -82,7 +84,7 @@ def test_write_metadata():
         expected_json = "{" + f'"timestamp": {timestamp}' + "}"
 
         # write metadata to archive
-        pybacked.logging.write_metadata(timestamp, arch_path,
+        pybacked.logging.write_metadata(metadata_container, arch_path,
                                         zipfile.ZIP_DEFLATED, 9)
 
         # Check if files were written successfully (multiple stages)
@@ -99,3 +101,20 @@ def test_write_metadata():
         metadata_file.close()
         archive.close()
         assert metadata == expected_json.encode()
+
+
+class TestMetadataContainer:
+    def test_constructor_empty(self):
+        instance = pybacked.logging.MetadataContainer()
+        assert instance.timestamp is None
+
+    def test_constructor_full(self):
+        timestamp = time.time()
+        instance = pybacked.logging.MetadataContainer(timestamp=timestamp)
+        assert instance.timestamp == timestamp
+
+    def test_equal(self):
+        timestamp = time.time()
+        instance1 = pybacked.logging.MetadataContainer(timestamp=timestamp)
+        instance2 = pybacked.logging.MetadataContainer(timestamp=timestamp)
+        assert instance1 == instance2

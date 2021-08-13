@@ -33,7 +33,8 @@ def backup(config):
 
     # write metadata.json
     timestamp = time.time()
-    pybacked.logging.write_metadata(timestamp, arch_full_path,
+    metadata = pybacked.logging.MetadataContainer(timestamp=timestamp)
+    pybacked.logging.write_metadata(metadata, arch_full_path,
                                     config.compression_algorithm,
                                     config.compresslevel)
 
