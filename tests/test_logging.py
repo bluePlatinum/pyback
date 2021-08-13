@@ -63,14 +63,16 @@ def test_write_log():
 
 def test_create_metadata_string():
     timestamp = time.time()
+    metadata = pybacked.logging.MetadataContainer(timestamp=timestamp)
     expected = "{" + f'"timestamp": {timestamp}' + "}"
-    result = pybacked.logging.create_metadata_string(timestamp)
+    result = pybacked.logging.create_metadata_string(metadata)
     assert result == expected
 
 
 def test_write_metadata():
     with tempfile.TemporaryDirectory() as tmpdir:
         timestamp = time.time()
+        metadata_container = pybacked.logging.MetadataContainer(timestamp)
 
         # copy the archive from full archive to the tmpdir
         archive_template = os.path.abspath(
@@ -82,7 +84,7 @@ def test_write_metadata():
         expected_json = "{" + f'"timestamp": {timestamp}' + "}"
 
         # write metadata to archive
-        pybacked.logging.write_metadata(timestamp, arch_path,
+        pybacked.logging.write_metadata(metadata_container, arch_path,
                                         zipfile.ZIP_DEFLATED, 9)
 
         # Check if files were written successfully (multiple stages)
