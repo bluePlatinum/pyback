@@ -11,6 +11,7 @@ def test_diffcache_constructor_empty():
     probe_object = diff.DiffCache()
     assert probe_object.diffdict == {}
     assert probe_object.dirflags == {}
+    assert probe_object.nested is True
 
 
 def test_diffcache_constructor_initialdict():
@@ -23,6 +24,12 @@ def test_diffcache_constructor_initialdirflags():
     initial_dirflags = {"filename": True}
     probe_object = diff.DiffCache(initialdirflags=initial_dirflags)
     assert probe_object.dirflags == initial_dirflags
+
+
+def test_diffcache_constructor_nested():
+    nested = False
+    probe_object = diff.DiffCache(nested=nested)
+    assert probe_object.nested == nested
 
 
 def test_diffcache_comparison():

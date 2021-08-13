@@ -14,8 +14,11 @@ class DiffCache:
     :type initialdict: dict, optional
     :param initialdirflags: Initial dir flags dictionary
     :type initialdirflags: dict, optional
+    :param nested: Indicates wether the DiffCache is nested, meaning that the
+        DiffCache itself can contain DiffCaches. (default is True)
+    :type nested: bool, optional
     """
-    def __init__(self, initialdict=None, initialdirflags=None):
+    def __init__(self, initialdict=None, initialdirflags=None, nested=True):
         if initialdict is None:
             self.diffdict = dict()
         else:
@@ -25,6 +28,7 @@ class DiffCache:
             self.dirflags = dict()
         else:
             self.dirflags = initialdirflags
+        self.nested = nested
 
     def __eq__(self, other):
         """
