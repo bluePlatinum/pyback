@@ -80,6 +80,24 @@ def read_bin(archivepath, filelist):
     return datadict
 
 
+def read_diff_log(archivepath):
+    """
+    Read the diff-log.csv from a given archive file.
+
+    :param archivepath: The path to the zip-archive
+    :type archivepath: str
+    :return: The diff-log.csv contents in ascii string form.
+    :rtype: str
+    """
+    arch = zipfile.ZipFile(archivepath, mode='r')
+    diff_log_file = arch.open("diff-log.csv")
+    diff_log_bin = diff_log_file.read()
+    diff_log = diff_log_bin.decode()
+    diff_log_file.close()
+    arch.close()
+    return diff_log
+
+
 def zip_extract(archivepath, filelist, extractpath):
     """
     Extract a list of files to a specific location
