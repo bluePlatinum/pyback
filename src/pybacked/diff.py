@@ -1,4 +1,7 @@
+import csv
+import io
 import os
+import pybacked.zip_handler
 from pybacked import DIFF_HASH
 from pybacked import restore
 
@@ -14,8 +17,11 @@ class DiffCache:
     :type initialdict: dict, optional
     :param initialdirflags: Initial dir flags dictionary
     :type initialdirflags: dict, optional
+    :param nested: Indicates wether the DiffCache is nested, meaning that the
+        DiffCache itself can contain DiffCaches. (default is True)
+    :type nested: bool, optional
     """
-    def __init__(self, initialdict=None, initialdirflags=None):
+    def __init__(self, initialdict=None, initialdirflags=None, nested=True):
         if initialdict is None:
             self.diffdict = dict()
         else:
@@ -25,6 +31,7 @@ class DiffCache:
             self.dirflags = dict()
         else:
             self.dirflags = initialdirflags
+        self.nested = nested
 
     def __eq__(self, other):
         """
@@ -298,3 +305,43 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
             if diff is not None:
                 diff_cache.add_diff(member_path, diff, False)
     return diff_cache
+
+
+def diff_log_deserialize(archive, basepath):
+    """
+    Read a diff-log.csv from a given archive and create a DiffCache from the
+    contents of the diff-log.
+
+    :param archive: The path to the zip-archive
+    :type archive: str
+    :param basepath: The path to the storage location. This is required as the
+        diff-log.csv only stores the relative filenames.
+    :type basepath: str
+    :return: The deserialized DiffCache object
+    :rtype: DiffCache
+    """
+    diff_log = pybacked.zip_handler.read_diff_log(archive)
+    diffcache = diff_log_deserialize_str(diff_log, basepath)
+    return diffcache
+
+
+def diff_log_deserialize_str(diff_log, basepath):
+    """
+    Create a DiffCache object from a given string.
+
+    :param diff_log: A String containing the contents of the diff-log.csv
+    :type diff_log: str
+    :param basepath: The path to the storage location. This is required as the
+        diff-log.csv only stores the relative filenames.
+    :type basepath: str
+    :return: The deserialized DiffCache object
+    :rtype: DiffCache
+    """
+    deserialized = DiffCache(nested=False)
+    wrapper = io.StringIO(diff_log)
+    reader = csv.DictReader(wrapper)
+    for entry in reader:
+        diff_obj = Diff(entry['modtype'], entry['diff'])
+        full_file_path = os.path.abspath(basepath + "/" + entry['filename'])
+        deserialized.add_diff(full_file_path, diff_obj, False)
+    return deserialized

@@ -78,3 +78,14 @@ def test_zip_extract():
         assertions = [osp.isfile(osp.abspath(tmpdir + '/' + filelist[0])),
                       osp.isfile(osp.abspath(tmpdir + '/' + filelist[1]))]
     assert assertions == [True, True]
+
+
+def test_read_diff_log():
+    archivepath = osp.abspath("./tests/testdata/archive_hash/arch1.zip")
+    expected = zip_handler.read_bin(archivepath,
+                                    ['diff-log.csv'])['diff-log.csv']
+
+    result = zip_handler.read_diff_log(archivepath)
+    # replace carriage returns to prevent errors from inconsistent handling
+    # of newlines
+    assert result.replace("\r", "") == expected.replace("\r", "")
