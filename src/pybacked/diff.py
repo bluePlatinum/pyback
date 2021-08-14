@@ -1,3 +1,5 @@
+import csv
+import io
 import os
 from pybacked import DIFF_HASH
 from pybacked import restore
@@ -302,3 +304,25 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
             if diff is not None:
                 diff_cache.add_diff(member_path, diff, False)
     return diff_cache
+
+
+def diff_log_deserialize_str(diff_log, basepath):
+    """
+    Create a DiffCache object from a given string.
+
+    :param diff_log: A String containing the contents of the diff-log.csv
+    :type diff_log: str
+    :param basepath: The path to the storage location. This is required as the
+        diff-log.csv only stores the relative filenames.
+    :type basepath: str
+    :return: The deserialized DiffCache object
+    :rtype: DiffCache
+    """
+    deserialized = DiffCache(nested=False)
+    wrapper = io.StringIO(diff_log)
+    reader = csv.DictReader(wrapper)
+    for entry in reader:
+        diff_obj = Diff(entry['modtype'], entry['diff'])
+        full_file_path = os.path.abspath(basepath + "/" + entry['filename'])
+        deserialized.add_diff(full_file_path, diff_obj, False)
+    return deserialized
