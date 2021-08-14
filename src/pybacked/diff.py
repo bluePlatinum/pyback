@@ -1,6 +1,7 @@
 import csv
 import io
 import os
+import pybacked.zip_handler
 from pybacked import DIFF_HASH
 from pybacked import restore
 
@@ -304,6 +305,24 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
             if diff is not None:
                 diff_cache.add_diff(member_path, diff, False)
     return diff_cache
+
+
+def diff_log_deserialize(archive, basepath):
+    """
+    Read a diff-log.csv from a given archive and create a DiffCache from the
+    contents of the diff-log.
+
+    :param archive: The path to the zip-archive
+    :type archive: str
+    :param basepath: The path to the storage location. This is required as the
+        diff-log.csv only stores the relative filenames.
+    :type basepath: str
+    :return: The deserialized DiffCache object
+    :rtype: DiffCache
+    """
+    diff_log = pybacked.zip_handler.read_diff_log(archive)
+    diffcache = diff_log_deserialize_str(diff_log, basepath)
+    return diffcache
 
 
 def diff_log_deserialize_str(diff_log, basepath):

@@ -317,3 +317,16 @@ def test_diff_log_deserialize_str():
     print(expected.diffdict)
 
     assert result == expected
+
+
+def test_diff_log_deserialize():
+    arch = abspath("./tests/testdata/full_archive/arch1.zip")
+    basepath = abspath("./tests/testdata/full_storage")
+
+    # create expected variables
+    diff_log = pybacked.zip_handler.read_diff_log(arch)
+    expected_diffcache = diff.diff_log_deserialize_str(diff_log, basepath)
+
+    result = diff.diff_log_deserialize(arch, basepath)
+
+    assert result == expected_diffcache
