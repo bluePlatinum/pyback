@@ -325,15 +325,17 @@ def diff_log_deserialize(archive, basepath):
     return diffcache
 
 
-def diff_log_deserialize_str(diff_log, basepath):
+def diff_log_deserialize_str(diff_log, basepath=None):
     """
     Create a DiffCache object from a given string.
 
     :param diff_log: A String containing the contents of the diff-log.csv
     :type diff_log: str
     :param basepath: The path to the storage location. This is required as the
-        diff-log.csv only stores the relative filenames.
-    :type basepath: str
+        diff-log.csv only stores the relative filenames. If basepath is None
+        diff_log_deserialize_str will use the the archive relative paths, just
+        like in the diff-log.csv
+    :type basepath: str, optional
     :return: The deserialized DiffCache object
     :rtype: DiffCache
     """
@@ -342,6 +344,10 @@ def diff_log_deserialize_str(diff_log, basepath):
     reader = csv.DictReader(wrapper)
     for entry in reader:
         diff_obj = Diff(entry['modtype'], entry['diff'])
-        full_file_path = os.path.abspath(basepath + "/" + entry['filename'])
+        if basepath is None:
+            full_file_path = entry['filename']
+        else:
+            full_file_path = os.path.abspath(
+                basepath + "/" + entry['filename'])
         deserialized.add_diff(full_file_path, diff_obj, False)
     return deserialized
