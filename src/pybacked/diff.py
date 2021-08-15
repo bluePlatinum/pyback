@@ -316,7 +316,7 @@ def diff_log_deserialize(archive, basepath=None):
     :type archive: str
     :param basepath: The path to the storage location. This is required as the
         diff-log.csv only stores the relative filenames.
-    :type basepath: str
+    :type basepath: str, optional
     :return: The deserialized DiffCache object
     :rtype: DiffCache
     """
