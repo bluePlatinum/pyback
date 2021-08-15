@@ -307,7 +307,7 @@ def collect(storage_dir, archive_dir, diff_algorithm, hash_algorithm=None,
     return diff_cache
 
 
-def diff_log_deserialize(archive, basepath):
+def diff_log_deserialize(archive, basepath=None):
     """
     Read a diff-log.csv from a given archive and create a DiffCache from the
     contents of the diff-log.
