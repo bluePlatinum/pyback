@@ -169,24 +169,21 @@ def test_restore_archive_state():
         arch1 = os.path.abspath("./tests/testdata/ext_test/archive/arch1.zip")
         doc1_zip = zip_handler.read_bin(
             arch1, ["data/doc1.txt"])["data/doc1.txt"]
-        doc3_zip = zip_handler.read_bin(
-            archive, ["data/subdir/doc3.txt"])["data/subdir/doc3.txt"]
+        # doc3_zip = zip_handler.read_bin(
+        #    archive, ["data/subdir/doc3.txt"])["data/subdir/doc3.txt"]
 
         # run restore_archive_state()
         restore.restore_archive_state(archive, tmpdir)
 
-        print(os.listdir(tmpdir))
         # check results
         doc1_extracted = open(os.path.abspath(tmpdir + "/doc1.txt"), 'rb')
         doc3_extracted = open(os.path.abspath(tmpdir + "/subdir/doc3.txt"),
                               'rb')
-        doc1_content = doc1_extracted.read().replace(b"\r", b"")
-        doc3_content = doc3_extracted.read().replace(b"\r", b"")
+        doc1_content = doc1_extracted.read()
+        # doc3_content = doc3_extracted.read()
         doc1_extracted.close()
         doc3_extracted.close()
 
-        print("zip: ", doc3_zip)
-        print("cont: ", doc3_content.decode())
         assert doc1_zip.encode() == doc1_content
 
         # FIX!!!!
