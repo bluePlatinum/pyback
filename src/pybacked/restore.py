@@ -3,6 +3,8 @@ import hashlib
 import io
 import os
 import pybacked
+import pybacked.diff
+import pybacked.zip_handler
 import zipfile
 
 
@@ -168,3 +170,40 @@ def get_arch_state(filename, archivedir, diff_algorithm):
             return diff_entry['diff']
         elif diff_algorithm == pybacked.DIFF_CONT:
             return bytes.fromhex(diff_entry['diff'])
+
+
+def restore_archive_state(archive, restore_dir):
+    """
+    Restore a given archive state. This will restore the state of the source
+    at the creation of the specified archive.
+
+    :param archive: The path to the specific zip-archive with the state that is
+        to be restored
+    :type archive: str
+    :param restore_dir: The directory in which the archive should be restored
+    :type restore_dir: str
+    :return: void
+    :rtype: None
+    """
+    archive_dir = os.path.split(archive)[0]
+    archive_list = get_archive_list(archive_dir)
+    # put archives into ascending order
+    archive_list.sort()
+    index = archive_list.index(archive)
+    for i in range(index + 1):
+        diffcache = pybacked.diff.diff_log_deserialize(archive_list[i],
+                                                       basepath=None)
+        for entry in diffcache:
+            archname = "data/" + entry[0]
+            destination = os.path.abspath(restore_dir + "/" + entry[0])
+            if entry[1].difftype == '+':
+                pybacked.zip_handler.extract_archdata(archive_list[i],
+                                                      archname, destination)
+            elif entry[1].difftype == '*':
+                if os.path.exists(destination):
+                    os.remove(destination)
+                pybacked.zip_handler.extract_archdata(archive_list[i],
+                                                      archname, destination)
+            elif entry[1].difftype == '-':
+                if os.path.exists(destination):
+                    os.remove(destination)
