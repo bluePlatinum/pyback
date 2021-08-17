@@ -73,6 +73,10 @@ def extract_archdata(archivepath, filename, destination):
     archive = zipfile.ZipFile(archivepath, mode='r')
     with tempfile.TemporaryDirectory() as tmpdir:
         archive.extract(filename, path=tmpdir)
+
+        # create directories for the destination
+        os.makedirs(os.path.dirname(destination), exist_ok=True)
+
         shutil.copy(os.path.abspath(tmpdir + "/" + filename), destination)
 
 
