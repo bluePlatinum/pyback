@@ -1,5 +1,7 @@
 import io
 import os
+import shutil
+import tempfile
 import zipfile
 
 
@@ -48,6 +50,30 @@ def create_archive(archivepath, filedict, compression, compressionlevel):
         for filepath, filename in filedict.items():
             archive.write(filepath, arcname="data/" + filename)
     archive.close()
+
+
+def extract_archdata(archivepath, filename, destination):
+    """
+    Extract a file from a archive and write it to the destination. If the
+    destination path already exists extract_archdata will not overwrite but
+    will throw a "FileExists" error.
+
+    :param archivepath: The path to the archive containing the file
+    :type archivepath: str
+    :param filename: The archive name of the desired file.
+    :type filename: str
+    :param destination: The path at which the extracted file is to be placed.
+    :type destination: str
+    :return: void
+    :rtype: None
+    """
+    # check if destination path already exists
+    if os.path.exists(destination):
+        raise FileExistsError("The specified destination is already in use")
+    archive = zipfile.ZipFile(archivepath, mode='r')
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archive.extract(filename, path=tmpdir)
+        shutil.copy(os.path.abspath(tmpdir + "/" + filename), destination)
 
 
 def read_bin(archivepath, filelist):

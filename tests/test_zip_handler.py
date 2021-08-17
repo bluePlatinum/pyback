@@ -89,3 +89,28 @@ def test_read_diff_log():
     # replace carriage returns to prevent errors from inconsistent handling
     # of newlines
     assert result.replace("\r", "") == expected.replace("\r", "")
+
+
+def test_extract_archdata():
+    archive = osp.abspath("./tests/testdata/ext_test/archive/arch2.zip")
+    archname = "data/subdir/doc3.txt"
+
+    # create expected variables
+    expected = zip_handler.read_bin(
+        archive, ['data/subdir/doc3.txt'])['data/subdir/doc3.txt']
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        basename = "randomname.abc"
+        destination = tmpdir + basename
+        zip_handler.extract_archdata(archive, archname, destination)
+
+        file = open(destination, 'rb')
+        file_content = file.read()
+        file.close()
+
+        print("file_conten: ", file_content.replace(b"\r", b""))
+        print("file_content: ", file_content.decode())
+        print("expected: ", expected)
+        print("expected: ", expected.encode())
+
+    assert file_content.replace(b"\r", b"") == expected.encode()
