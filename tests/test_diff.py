@@ -291,42 +291,69 @@ def test_diffcache_iter():
     assert dirflags == exp_dirflags
 
 
-def test_diff_log_deserialize_str():
-    arch = abspath("./tests/testdata/full_archive/arch1.zip")
-    diff_log = pybacked.zip_handler.read_diff_log(arch)
+class TestDiffLogDeserialization:
+    def test_diff_log_deserialize_str(self):
+        arch = abspath("./tests/testdata/full_archive/arch1.zip")
+        diff_log = pybacked.zip_handler.read_diff_log(arch)
 
-    # create expected variables
-    expected = pybacked.diff.DiffCache(nested=False)
-    diff1 = pybacked.diff.Diff('+', '1')
-    path1 = abspath("./tests/testdata/full_storage/doc1.txt")
-    diff2 = pybacked.diff.Diff('+', '2')
-    path2 = abspath("./tests/testdata/full_storage/subdir/doc2.txt")
-    diff3 = pybacked.diff.Diff('+', '3')
-    path3 = abspath("./tests/testdata/full_storage/subdir/doc3.txt")
-    diff4 = pybacked.diff.Diff('+', '4')
-    path4 = abspath("./tests/testdata/full_storage/subdir/subdir/doc4.txt")
-    expected.add_diff(path1, diff1, False)
-    expected.add_diff(path2, diff2, False)
-    expected.add_diff(path3, diff3, False)
-    expected.add_diff(path4, diff4, False)
+        # create expected variables
+        expected = pybacked.diff.DiffCache(nested=False)
+        diff1 = pybacked.diff.Diff('+', '1')
+        path1 = abspath("./tests/testdata/full_storage/doc1.txt")
+        diff2 = pybacked.diff.Diff('+', '2')
+        path2 = abspath("./tests/testdata/full_storage/subdir/doc2.txt")
+        diff3 = pybacked.diff.Diff('+', '3')
+        path3 = abspath("./tests/testdata/full_storage/subdir/doc3.txt")
+        diff4 = pybacked.diff.Diff('+', '4')
+        path4 = abspath("./tests/testdata/full_storage/subdir/subdir/doc4.txt")
+        expected.add_diff(path1, diff1, False)
+        expected.add_diff(path2, diff2, False)
+        expected.add_diff(path3, diff3, False)
+        expected.add_diff(path4, diff4, False)
 
-    basepath = abspath("./tests/testdata/full_storage")
-    result = pybacked.diff.diff_log_deserialize_str(diff_log, basepath)
+        basepath = abspath("./tests/testdata/full_storage")
+        result = pybacked.diff.diff_log_deserialize_str(diff_log, basepath)
 
-    print(result.diffdict)
-    print(expected.diffdict)
+        print(result.diffdict)
+        print(expected.diffdict)
 
-    assert result == expected
+        assert result == expected
 
+    def test_diff_log_deserialize_str_no_basepath(self):
+        arch = abspath("./tests/testdata/full_archive/arch1.zip")
+        diff_log = pybacked.zip_handler.read_diff_log(arch)
 
-def test_diff_log_deserialize():
-    arch = abspath("./tests/testdata/full_archive/arch1.zip")
-    basepath = abspath("./tests/testdata/full_storage")
+        # create expected variables
+        expected = pybacked.diff.DiffCache(nested=False)
+        diff1 = pybacked.diff.Diff('+', '1')
+        path1 = "doc1.txt"
+        diff2 = pybacked.diff.Diff('+', '2')
+        path2 = "subdir/doc2.txt"
+        diff3 = pybacked.diff.Diff('+', '3')
+        path3 = "subdir/doc3.txt"
+        diff4 = pybacked.diff.Diff('+', '4')
+        path4 = "subdir/subdir/doc4.txt"
+        expected.add_diff(path1, diff1, False)
+        expected.add_diff(path2, diff2, False)
+        expected.add_diff(path3, diff3, False)
+        expected.add_diff(path4, diff4, False)
 
-    # create expected variables
-    diff_log = pybacked.zip_handler.read_diff_log(arch)
-    expected_diffcache = diff.diff_log_deserialize_str(diff_log, basepath)
+        basepath = None
+        result = pybacked.diff.diff_log_deserialize_str(diff_log, basepath)
 
-    result = diff.diff_log_deserialize(arch, basepath)
+        print(result.diffdict)
+        print(expected.diffdict)
 
-    assert result == expected_diffcache
+        assert result == expected
+
+    def test_diff_log_deserialize(self):
+        arch = abspath("./tests/testdata/full_archive/arch1.zip")
+        basepath = abspath("./tests/testdata/full_storage")
+
+        # create expected variables
+        diff_log = pybacked.zip_handler.read_diff_log(arch)
+        expected_diffcache = diff.diff_log_deserialize_str(diff_log, basepath)
+
+        result = diff.diff_log_deserialize(arch, basepath)
+
+        assert result == expected_diffcache

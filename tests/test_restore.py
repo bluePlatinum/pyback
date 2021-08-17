@@ -2,9 +2,11 @@ import hashlib
 import io
 import os
 import pytest
+import tempfile
 from pybacked import HASH_SHA256
 from pybacked import DIFF_CONT, DIFF_DATE, DIFF_HASH
 from pybacked import restore
+from pybacked import zip_handler
 
 
 def test_get_archive_list():
@@ -156,3 +158,36 @@ def test_get_current_state_content():
     expected = restore.get_file_content(filepath)
     result = restore.get_current_state(filepath, DIFF_CONT)
     assert result == expected
+
+
+def test_restore_archive_state():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archive = os.path.abspath(
+            "./tests/testdata/ext_test/archive/arch2.zip")
+
+        # create expected variablese
+        arch1 = os.path.abspath("./tests/testdata/ext_test/archive/arch1.zip")
+        doc1_zip = zip_handler.read_bin(
+            arch1, ["data/doc1.txt"])["data/doc1.txt"]
+        doc3_zip = zip_handler.read_bin(
+            archive, ["data/subdir/doc3.txt"])["data/subdir/doc3.txt"]
+
+        # run restore_archive_state()
+        restore.restore_archive_state(archive, tmpdir)
+
+        print(os.listdir(tmpdir))
+        # check results
+        doc1_extracted = open(os.path.abspath(tmpdir + "/doc1.txt"), 'rb')
+        doc3_extracted = open(os.path.abspath(tmpdir + "/subdir/doc3.txt"),
+                              'rb')
+        doc1_content = doc1_extracted.read().replace(b"\r", b"")
+        doc3_content = doc3_extracted.read().replace(b"\r", b"")
+        doc1_extracted.close()
+        doc3_extracted.close()
+
+        print("zip: ", doc3_zip)
+        print("cont: ", doc3_content.decode())
+        assert doc1_zip.encode() == doc1_content
+
+        # FIX!!!!
+        # assert doc3_zip == doc3_content
