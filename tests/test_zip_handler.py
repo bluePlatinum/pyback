@@ -96,8 +96,7 @@ def test_extract_archdata():
     archname = "data/subdir/doc3.txt"
 
     # create expected variables
-    expected = zip_handler.read_bin(
-        archive, ['data/subdir/doc3.txt'])['data/subdir/doc3.txt']
+    expected = b"Document 3 \xc2\xa7\n\xc2\xa7"
 
     with tempfile.TemporaryDirectory() as tmpdir:
         basename = "randomname.abc"
@@ -108,9 +107,4 @@ def test_extract_archdata():
         file_content = file.read()
         file.close()
 
-        print("file_conten: ", file_content.replace(b"\r", b""))
-        print("file_content: ", file_content.decode())
-        print("expected: ", expected)
-        print("expected: ", expected.encode())
-
-    assert file_content.replace(b"\r", b"") == expected.encode()
+    assert file_content.replace(b"\r", b"") == expected
