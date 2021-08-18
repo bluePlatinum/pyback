@@ -57,8 +57,8 @@ def test_read_bin():
     control_data2 = control_file2.read().decode()
     control_file2.close()
 
-    assert datadict[filelist[0]] == control_data1
-    assert datadict[filelist[1]] == control_data2
+    assert datadict[filelist[0]].replace("\r", "") == control_data1
+    assert datadict[filelist[1]].replace("\r", "") == control_data2
 
 
 def test_zip_extract():
