@@ -1,4 +1,3 @@
-import io
 import os
 import shutil
 import tempfile
@@ -97,13 +96,11 @@ def read_bin(archivepath, filelist):
         raise FileNotFoundError("Specified file does not exist")
     for filename in filelist:
         try:
-            buffer = archive.open(filename)
-            wrapper = io.TextIOWrapper(buffer, newline=None)
+            file = archive.open(filename)
 
-            datadict[filename] = wrapper.read()
+            datadict[filename] = file.read().decode()
 
-            wrapper.close()
-            buffer.close()
+            file.close()
         except KeyError:
             datadict[filename] = None
     archive.close()

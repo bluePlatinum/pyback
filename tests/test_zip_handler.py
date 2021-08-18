@@ -50,22 +50,15 @@ def test_read_bin():
     datadict = zip_handler.read_bin(archivepath, filelist)
 
     control_file1 = io.open(osp.abspath(datadir + filelist[0]), "rb")
-    control_file1_wrapper = io.TextIOWrapper(control_file1, newline=None)
-    control_data1 = control_file1_wrapper.read()
-    control_file1_wrapper.close()
+    control_data1 = control_file1.read().decode()
     control_file1.close()
 
     control_file2 = io.open(osp.abspath(datadir + filelist[1]), "rb")
-    control_file2_wrapper = io.TextIOWrapper(control_file2, newline=None)
-    control_data2 = control_file2_wrapper.read()
-    control_file2_wrapper.close()
+    control_data2 = control_file2.read().decode()
     control_file2.close()
 
-    assertions = [False, False]
-    assertions[0] = (datadict[filelist[0]] == control_data1)
-    assertions[1] = (datadict[filelist[1]] == control_data2)
-
-    assert assertions == [True, True]
+    assert datadict[filelist[0]].replace("\r", "") == control_data1
+    assert datadict[filelist[1]].replace("\r", "") == control_data2
 
 
 def test_zip_extract():
