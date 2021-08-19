@@ -99,3 +99,21 @@ def serialize_config_list(config_list):
         config_dict[element.name] = element.get_dict()
     json_string = json.dumps(config_dict)
     return json_string
+
+
+def write_config(config_list, filepath):
+    """
+    Get the json string returned by serialize_config_list and write it to a
+    given file.
+
+    :param config_list: A list of Configuration objects
+    :type config_list: list
+    :param filepath: The path to the config file, which will hold the config
+        information.
+    :type filepath: str
+    :return: void
+    :rtype: None
+    """
+    json_string = serialize_config_list(config_list)
+    file = open(filepath, 'w')
+    file.write(json_string)
