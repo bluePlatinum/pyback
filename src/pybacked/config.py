@@ -1,3 +1,6 @@
+import json
+
+
 class Configuration:
     """
     Class to hold all the data of a specific backup configuration. This can be
@@ -62,3 +65,19 @@ class Configuration:
                              "hash_algorithm": hash_algorithm}
 
         return configuration_dir
+
+
+def serialize_config(config):
+    """
+    Returns the json-serialized string from Configuration object. This string
+    can then be directly written to the .json file.
+
+    :param config: The Configuration object
+    :type config: Configuration
+    :return: The json-serialized string of the Configuration object
+    :rtype: str
+    """
+    # write the fileds to variables for improved readability
+
+    json_string = json.dumps(config.get_dict())
+    return json_string
