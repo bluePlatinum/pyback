@@ -36,3 +36,29 @@ class Configuration:
         self.compression_algorithm = compression_algorithm
         self.compresslevel = compresslevel
         self.hash_algorithm = hash_algorithm
+
+    def get_dict(self):
+        """
+        Get a dictionary with all fields of the Configuration class
+        represented as fieldname-value pairs.
+
+        :return: Returns the dictionary of all fields of the Configuration
+            class
+        :rtype: dict
+        """
+        name = self.name
+        storage = self.storage
+        archive = self.archive
+        diff_algorithm = self.diff_algorithm
+        compression_alg = self.compression_algorithm
+        compresslevel = self.compresslevel
+        hash_algorithm = self.hash_algorithm
+
+        configuration_dir = {"name": name, "storage": storage,
+                             "archive": archive,
+                             "diff_algorithm": diff_algorithm,
+                             "compression_algorithm": compression_alg,
+                             "compresslevel": compresslevel,
+                             "hash_algorithm": hash_algorithm}
+
+        return configuration_dir
