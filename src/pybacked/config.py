@@ -81,3 +81,21 @@ def serialize_config(config):
 
     json_string = json.dumps(config.get_dict())
     return json_string
+
+
+def serialize_config_list(config_list):
+    """
+    Serialize a list of configs. This is used so that the user has the option
+    to save multiple configs in a single file.
+
+    :param config_list: A list of Configuration class objects
+    :type config_list: list
+    :return: A serialized json string which can directly be written to a config
+        file.
+    :rtype: str
+    """
+    config_dict = dict()
+    for element in config_list:
+        config_dict[element.name] = element.get_dict()
+    json_string = json.dumps(config_dict)
+    return json_string

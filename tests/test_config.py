@@ -33,3 +33,20 @@ def test_serialize_config():
     expected = json.dumps(instance.get_dict())
     result = pybacked.config.serialize_config(instance)
     assert result == expected
+
+
+def test_serialize_config_list():
+    instance1 = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                              hash_algorithm=7)
+    instance2 = pybacked.config.Configuration("8", "9", "10", 11, 12, 13,
+                                              hash_algorithm=14)
+    config_list = [instance1, instance2]
+
+    # create expected
+    config_dict = dict()
+    for element in config_list:
+        config_dict[element.name] = element.get_dict()
+    expected = json.dumps(config_dict)
+
+    result = pybacked.config.serialize_config_list(config_list)
+    assert result == expected
