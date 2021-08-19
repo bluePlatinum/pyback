@@ -50,11 +50,11 @@ def test_read_bin():
     datadict = zip_handler.read_bin(archivepath, filelist)
 
     control_file1 = io.open(osp.abspath(datadir + filelist[0]), "rb")
-    control_data1 = control_file1.read().decode()
+    control_data1 = control_file1.read().decode().replace("\r", "")
     control_file1.close()
 
     control_file2 = io.open(osp.abspath(datadir + filelist[1]), "rb")
-    control_data2 = control_file2.read().decode()
+    control_data2 = control_file2.read().decode().replace("\r", "")
     control_file2.close()
 
     assert datadict[filelist[0]].replace("\r", "") == control_data1
