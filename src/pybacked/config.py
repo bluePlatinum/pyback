@@ -67,6 +67,22 @@ class Configuration:
         return configuration_dir
 
 
+def read_config(filepath):
+    """
+    Read the config from a given config file.
+
+    :param filepath: The path to the config file.
+    :type filepath: str
+    :return: The json deserialized list.
+    :rtype: list
+    """
+    file = open(filepath, 'r')
+    file_content = file.read()
+    config_list = json.loads(file_content)
+    file.close()
+    return config_list
+
+
 def serialize_config(config):
     """
     Returns the json-serialized string from Configuration object. This string

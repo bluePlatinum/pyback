@@ -75,3 +75,21 @@ def test_write_string():
         file.close()
 
         assert file_content == expected
+
+
+def test_read_config():
+    configfile_path = os.path.abspath("./tests/testdata/config-example.json")
+
+    # create expected values
+    expected = {'1': {'name': '1', 'storage': '2', 'archive': '3',
+                      'diff_algorithm': 4, 'compression_algorithm': 5,
+                      'compresslevel': 6, 'hash_algorithm': 7},
+                '8': {'name': '8', 'storage': '9', 'archive': '10',
+                      'diff_algorithm': 11, 'compression_algorithm': 12,
+                      'compresslevel': 13, 'hash_algorithm': 14},
+                '15': {'name': '15', 'storage': '16', 'archive': '17',
+                       'diff_algorithm': 18, 'compression_algorithm': 19,
+                       'compresslevel': 20, 'hash_algorithm': 21}}
+
+    result = pybacked.config.read_config(configfile_path)
+    assert result == expected
