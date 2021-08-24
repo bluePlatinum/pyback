@@ -28,6 +28,20 @@ class TestConfigurationClass:
         result = instance.get_dict()
         assert result == expected
 
+    def test_equal(self):
+        instance1 = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                                  hash_algorithm=7)
+        instance2 = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                                  hash_algorithm=7)
+        assert instance1 == instance2
+
+    def test_non_equal(self):
+        instance1 = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                                  hash_algorithm=7)
+        instance2 = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                                  hash_algorithm=8)
+        assert instance1 != instance2
+
 
 def test_serialize_config():
     instance = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,

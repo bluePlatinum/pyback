@@ -40,6 +40,24 @@ class Configuration:
         self.compresslevel = compresslevel
         self.hash_algorithm = hash_algorithm
 
+    def __eq__(self, other):
+        if self.name != other.name:
+            return False
+        elif self.storage != other.storage:
+            return False
+        elif self.archive != other.archive:
+            return False
+        elif self.diff_algorithm != other.diff_algorithm:
+            return False
+        elif self.compression_algorithm != other.compression_algorithm:
+            return False
+        elif self.compresslevel != other.compresslevel:
+            return False
+        elif self.hash_algorithm != other.hash_algorithm:
+            return False
+        else:
+            return True
+
     def get_dict(self):
         """
         Get a dictionary with all fields of the Configuration class
