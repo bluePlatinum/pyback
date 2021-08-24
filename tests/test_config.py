@@ -107,3 +107,11 @@ def test_read_config():
 
     result = pybacked.config.read_config(configfile_path)
     assert result == expected
+
+
+def test_deserialize_config():
+    config = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                           hash_algorithm=7)
+    data = pybacked.config.serialize_config(config)
+    deserialized = pybacked.config.deserialize_config(data)
+    assert config == deserialized
