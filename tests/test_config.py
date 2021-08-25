@@ -110,8 +110,11 @@ def test_read_config():
 
 
 def test_deserialize_config():
-    config = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
-                                           hash_algorithm=7)
-    data = pybacked.config.serialize_config(config)
+    instance1 = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
+                                              hash_algorithm=7)
+    instance2 = pybacked.config.Configuration("8", "9", "10", 11, 12, 13,
+                                              hash_algorithm=14)
+    config_list = [instance1, instance2]
+    data = pybacked.config.serialize_config_list(config_list)
     deserialized = pybacked.config.deserialize_config(data)
-    assert config == deserialized
+    assert deserialized == config_list

@@ -87,21 +87,27 @@ class Configuration:
 
 def deserialize_config(data):
     """
-    Create a Configuration class instance from a given json-config string.
+    Create instances of Configuration class from a json-string containging
+    config data.
 
-    :param data: The json string containing the json data.
+    :param data: The json string containing the configuration data
     :type data: str
-    :return: An object of the Configuration class containing the config data.
-    :rtype: Configuration
+    :return: A list with Configuration class objects.
+    :rtype: List
     """
     config_dict = json.loads(data)
-    config = Configuration(config_dict['name'], config_dict['storage'],
-                           config_dict['archive'],
-                           config_dict['diff_algorithm'],
-                           config_dict['compression_algorithm'],
-                           config_dict['compresslevel'],
-                           config_dict['hash_algorithm'])
-    return config
+    config_list = list()
+    for config_name, config_data in config_dict.items():
+        current_config = config_dict[config_name]
+        config = Configuration(current_config['name'],
+                               current_config['storage'],
+                               current_config['archive'],
+                               current_config['diff_algorithm'],
+                               current_config['compression_algorithm'],
+                               current_config['compresslevel'],
+                               current_config['hash_algorithm'])
+        config_list.append(config)
+    return config_list
 
 
 def read_config(filepath):
