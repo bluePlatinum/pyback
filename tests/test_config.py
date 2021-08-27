@@ -46,7 +46,8 @@ class TestConfigurationClass:
 def test_serialize_config():
     instance = pybacked.config.Configuration("1", "2", "3", 4, 5, 6,
                                              hash_algorithm=7)
-    expected = json.dumps(instance.get_dict())
+    expected = json.dumps(instance.get_dict(), sort_keys=pybacked.JSON_SORT,
+                          indent=pybacked.JSON_INDENT)
     result = pybacked.config.serialize_config(instance)
     assert result == expected
 
@@ -62,7 +63,8 @@ def test_serialize_config_list():
     config_dict = dict()
     for element in config_list:
         config_dict[element.name] = element.get_dict()
-    expected = json.dumps(config_dict)
+    expected = json.dumps(config_dict, sort_keys=pybacked.JSON_SORT,
+                          indent=pybacked.JSON_INDENT)
 
     result = pybacked.config.serialize_config_list(config_list)
     assert result == expected
