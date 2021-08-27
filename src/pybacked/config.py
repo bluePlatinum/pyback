@@ -1,5 +1,7 @@
 import json
 
+import pybacked
+
 
 class Configuration:
     """
@@ -138,7 +140,8 @@ def serialize_config(config):
     """
     # write the fileds to variables for improved readability
 
-    json_string = json.dumps(config.get_dict())
+    json_string = json.dumps(config.get_dict(), sort_keys=pybacked.JSON_SORT,
+                             indent=pybacked.JSON_INDENT)
     return json_string
 
 
@@ -156,7 +159,8 @@ def serialize_config_list(config_list):
     config_dict = dict()
     for element in config_list:
         config_dict[element.name] = element.get_dict()
-    json_string = json.dumps(config_dict)
+    json_string = json.dumps(config_dict, sort_keys=pybacked.JSON_SORT,
+                             indent=pybacked.JSON_INDENT)
     return json_string
 
 
