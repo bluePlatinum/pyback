@@ -172,6 +172,32 @@ def get_arch_state(filename, archivedir, diff_algorithm):
             return bytes.fromhex(diff_entry['diff'])
 
 
+def restore(config, archname, alt_dir=None):
+    """
+    Restore a given backup to the original source directory or an alternative
+    directory.
+
+    :param config: The configuration for the backup
+    :type config: Configuration
+    :param archname: The name of the archive which holds the state which should
+        be restored.
+    :type archname: str
+    :param alt_dir: Specifies an alternate directory in which the source will
+        be restored. If this is None, the function will restore the source
+        to the original source directory specified in the provieded
+        Configuration class instance.
+    :type alt_dir: str, optional
+    :return: void
+    :rtype: None
+    """
+    if alt_dir is None:
+        restore_dir = config.storage
+    else:
+        restore_dir = alt_dir
+    archive = os.path.abspath(config.archive + "/" + archname)
+    restore_archive_state(archive, restore_dir)
+
+
 def restore_archive_state(archive, restore_dir):
     """
     Restore a given archive state. This will restore the state of the source
