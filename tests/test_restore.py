@@ -3,8 +3,10 @@ import io
 import os
 import pytest
 import tempfile
+import zipfile
 from pybacked import HASH_SHA256
 from pybacked import DIFF_CONT, DIFF_DATE, DIFF_HASH
+from pybacked import config
 from pybacked import restore
 from pybacked import zip_handler
 
@@ -186,3 +188,83 @@ def test_restore_archive_state():
 
         assert doc1_zip.encode() == doc1_content
         assert doc3_zip.encode() == doc3_content
+
+
+class TestRestore:
+    def test_restore_orig_dir(self):
+        # test pybacked.restore.restore for original source directory
+        with tempfile.TemporaryDirectory() as tmpdir:
+            archive = os.path.abspath(
+                "./tests/testdata/ext_test/archive")
+            archname = "arch2.zip"
+            storage = os.path.abspath(tmpdir)
+
+            # diff_algorithm, compression_algorithm, compresslevel are
+            # irrelevant
+            configuration = config.Configuration("testconfig1", storage,
+                                                 archive, DIFF_DATE,
+                                                 zipfile.ZIP_DEFLATED, 9)
+
+            # create expected variablese
+            arch1 = os.path.abspath(
+                "./tests/testdata/ext_test/archive/arch1.zip")
+            arch2 = os.path.abspath(
+                "./tests/testdata/ext_test/archive/arch2.zip")
+            doc1_zip = zip_handler.read_bin(
+                arch1, ["data/doc1.txt"])["data/doc1.txt"]
+            doc3_zip = zip_handler.read_bin(
+                arch2, ["data/subdir/doc3.txt"])["data/subdir/doc3.txt"]
+
+            # run restore
+            restore.restore(configuration, archname)
+
+            # check results
+            doc1_extracted = open(os.path.abspath(tmpdir + "/doc1.txt"), 'rb')
+            doc3_extracted = open(os.path.abspath(tmpdir + "/subdir/doc3.txt"),
+                                  'rb')
+            doc1_content = doc1_extracted.read()
+            doc3_content = doc3_extracted.read()
+            doc1_extracted.close()
+            doc3_extracted.close()
+
+            assert doc1_zip.encode() == doc1_content
+            assert doc3_zip.encode() == doc3_content
+
+    def test_restore_alt_dir(self):
+        # test pybacked.restore.restore for alternate source directory
+        with tempfile.TemporaryDirectory() as tmpdir:
+            archive = os.path.abspath(
+                "./tests/testdata/ext_test/archive")
+            archname = "arch2.zip"
+            storage = os.path.abspath(tmpdir)
+
+            # storage, diff_algorithm, compression_algorithm, compressionlevel
+            # are irrelevant
+            configuration = config.Configuration("testconfig1", "storage",
+                                                 archive, DIFF_DATE,
+                                                 zipfile.ZIP_DEFLATED, 9)
+
+            # create expected variablese
+            arch1 = os.path.abspath(
+                "./tests/testdata/ext_test/archive/arch1.zip")
+            arch2 = os.path.abspath(
+                "./tests/testdata/ext_test/archive/arch2.zip")
+            doc1_zip = zip_handler.read_bin(
+                arch1, ["data/doc1.txt"])["data/doc1.txt"]
+            doc3_zip = zip_handler.read_bin(
+                arch2, ["data/subdir/doc3.txt"])["data/subdir/doc3.txt"]
+
+            # run restore
+            restore.restore(configuration, archname, alt_dir=storage)
+
+            # check results
+            doc1_extracted = open(os.path.abspath(tmpdir + "/doc1.txt"), 'rb')
+            doc3_extracted = open(os.path.abspath(tmpdir + "/subdir/doc3.txt"),
+                                  'rb')
+            doc1_content = doc1_extracted.read()
+            doc3_content = doc3_extracted.read()
+            doc1_extracted.close()
+            doc3_extracted.close()
+
+            assert doc1_zip.encode() == doc1_content
+            assert doc3_zip.encode() == doc3_content
