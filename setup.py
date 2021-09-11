@@ -22,6 +22,6 @@ setuptools.setup(
     packages=setuptools.find_packages(where="src"),
     python_requires=">=3.7",
     entry_points={
-        "console_scripts": ["pybacked=pybacked.__main__:main"]
+        "console_scripts": ["pybacked=pybacked.cli:main"]
     },
 )
