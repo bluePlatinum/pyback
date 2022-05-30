@@ -525,11 +525,11 @@
         },
         "rich": {
             "hashes": [
-                "sha256:abcecd4444fa27cf84de412f713305e0d5481c941f12fc202fa4fc6711f80feb",
-                "sha256:cd8c809da089740f4bd94fa6d544cf23421d4bad34988569c2d03fdbdb858f0d"
+                "sha256:4c586de507202505346f3e32d1363eb9ed6932f0c2f63184dea88983ff4971e2",
+                "sha256:d2bbd99c320a2532ac71ff6a3164867884357da3e3301f0240090c5d2fdac7ec"
             ],
             "markers": "python_version < '4' and python_full_version >= '3.6.3'",
-            "version": "==12.4.2"
+            "version": "==12.4.4"
         },
         "sanitized-package": {
             "editable": true,
@@ -560,11 +560,11 @@
         },
         "sphinx": {
             "hashes": [
-                "sha256:7bf8ca9637a4ee15af412d1a1d9689fec70523a68ca9bb9127c2f3eeb344e2e6",
-                "sha256:ebf612653238bcc8f4359627a9b7ce44ede6fdd75d9d30f68255c7383d3a6226"
+                "sha256:464d9c1bd5613bcebe76b46658763f3f3dbb184da7406e632a84596d3cd8ee90",
+                "sha256:af248b21e3282f847ff20feebe7a1985fb34773cbe3fc75bf206897f1a2199c4"
             ],
             "index": "pypi",
-            "version": "==4.5.0"
+            "version": "==5.0.0"
         },
         "sphinx-rtd-theme": {
             "hashes": [
